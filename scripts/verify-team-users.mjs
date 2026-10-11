@@ -8,9 +8,17 @@ const origins = [
 ];
 const results = [];
 let documentHash;
+// NGINX limits session requests by IP, including logout. Respect the shared quota.
+async function session(origin, options) {
+  for (let attempt = 0; attempt < 7; attempt++) {
+    const response = await fetch(`${origin}/api/v1/session`, options);
+    if (response.status !== 429 || attempt === 6) return response;
+    await new Promise((resolve) => setTimeout(resolve, 13000));
+  }
+}
 for (const origin of origins)
   for (const username of usernames) {
-    const response = await fetch(`${origin}/api/v1/session`, {
+    const response = await session(origin, {
       method: "POST",
       headers: { Origin: origin, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -41,7 +49,7 @@ for (const origin of origins)
         sharedData: true,
       });
     } finally {
-      await fetch(`${origin}/api/v1/session`, {
+      await session(origin, {
         method: "DELETE",
         headers: { Cookie, Origin: origin },
       });

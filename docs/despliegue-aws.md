@@ -75,6 +75,18 @@ El ensayo está en `scripts/test-application-failover.mjs` y su registro fechado
 
 ## Operación
 
+### Actualización del equipo y acceso
+
+El [registro de esta actualización](evidence-team-release.json) complementa las evidencias del failover anterior. El respaldo del equipo también se restauró en un contenedor aislado sin red: revisión, SHA256, operaciones y usuarios coincidieron con la réplica activa.
+
+El 11 de octubre se desplegó la versión `862f8c374f2d` con la misma imagen web en ambas nubes, digest `sha256:178d6e1367f7383c3a87d1bd771e25370dd787a3874023f73f769aa5c92caf5b`. Cloud Build `242b56b1-14a0-451a-b18d-586943970694` y [GitHub Actions](https://github.com/ga22038/MultiCloud/actions/runs/38183535878) terminaron correctamente. GCP se actualizó primero y AWS después; NGINX recargó su configuración tras sustituir cada contenedor. No se cambió el esquema SQL ni el plan de facturación.
+
+Se agregaron CA21062, LP21019, SE21003, SL21010 y JM21008 como administradores. La base conserva el administrador inicial y ga22038: **siete usuarios** en total. La entrada admite mayúsculas; las contraseñas se guardan con hash scrypt y sal independiente. El backend usa el usuario de la sesión para registrar el creador y el último modificador. Véase [usuarios y trazabilidad](usuarios-y-trazabilidad.md).
+
+La [prueba de autoría](evidence-team-attribution.json) avanzó la revisión de **5 a 9**: CA21062 creó la bodega de prueba y recibió 1 kg ficticio en el lote `UES-AUTORIA-001`; JM21008 modificó la bodega y registró una baja equivalente. El lote quedó en **0 kg**, conservando al creador CA21062 y al último operador JM21008. Los pedidos anteriores permanecieron idénticos. Se rechazó un campo de autor falsificado con HTTP 400. Ambas nubes devolvieron los mismos datos.
+
+La réplica mantuvo IO/SQL activos, TLS verificado, errores 0 y retraso observado de 0 segundos. La revisión **9** tiene SHA256 SQL `bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1`, **nueve operaciones** y **siete usuarios**. Se generó una copia privada adicional a las **23:20:04 UTC**, objeto `mariadb/20261011T232004Z-409a3763.sql.gz`, **8498 bytes**, CRC32C `0td9WA==`. Las evidencias de revisión 5 anteriores permanecen como registro fechado del ensayo de failover.
+
 ```powershell
 rtk proxy pwsh -NoProfile -File scripts/connect-aws.ps1 Identity
 rtk proxy pwsh -NoProfile -File scripts/connect-aws.ps1 Plan

@@ -1,0 +1,23 @@
+{
+  "verifiedAt": "2026-10-11T23:19:09.884Z",
+  "result": "TEAM_ATTRIBUTION_OK",
+  "creator": "ca21062",
+  "editor": "jm21008",
+  "warehouseId": "3a4d974f-06e6-4e0a-8b4f-bb4f6e4879be",
+  "stockId": "d0675426-84c7-4a8e-9bc0-95015a834685",
+  "lot": "UES-AUTORIA-001",
+  "fixtureGrams": 1000,
+  "finalBalanceGrams": 0,
+  "revisionBefore": 5,
+  "revisionAfter": 9,
+  "originalOrdersPreserved": true,
+  "forgedCreatorRejected": true,
+  "crossCloudDataMatches": true,
+  "creatorPreservedOnEdit": true,
+  "operationIds": [
+    "3b4ca64c-a8fa-40a1-a005-04b5373211b3",
+    "bef2cf75-4f8b-4626-a407-f9fc5a516921",
+    "63594beb-e105-41b7-b51b-9e3f8a076a61",
+    "787e1912-8372-4b24-b320-bb2a4e58afab"
+  ]
+}

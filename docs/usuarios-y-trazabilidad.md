@@ -23,3 +23,11 @@ Compartir la misma contraseña reduce la certeza de autoría: alguien que conoce
 El acceso conserva la paleta azul grafito y gris, con una estrella Polaris y órbitas de profundidad hechas en CSS. Después de autenticar correctamente y cargar los datos, aparece una bienvenida personalizada durante **6 segundos**, con rol y botón **Entrar ahora**. El efecto se inspira en la transición de `C:\Dev\Polaris 1.1`, sin modificar ese proyecto.
 
 La bienvenida aparece una vez por inicio de sesión, no al actualizar la página ni al cambiar módulos. Los temporizadores se cancelan al salir. El movimiento decorativo se reduce con `prefers-reduced-motion`. La barra representa el tiempo de bienvenida; no simula progreso de la base de datos ni de la autenticación.
+
+## Evidencias de esta entrega
+
+- [Verificación de usuarios, imagen, réplica y respaldo](evidence-team-release.json).
+- [Prueba de autoría entre CA21062 y JM21008](evidence-team-attribution.json). El lote ficticio `UES-AUTORIA-001` quedó con saldo cero tras la entrada y baja de 1 kg.
+- [Acceso publicado](polaris-ues-login.png) y [bienvenida de JM21008](polaris-ues-bienvenida.png).
+
+Se verificaron los cinco carnets en AWS y GCP. El inventario y los pedidos anteriores permanecieron compartidos. Las verificaciones de sesión respetan los límites de solicitudes de NGINX; HTTP 429 requiere esperar antes de repetir.

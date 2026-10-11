@@ -1,0 +1,56 @@
+{
+  "verifiedOn": "2026-10-11",
+  "sourceRevision": "862f8c374f2d",
+  "cloudBuildId": "242b56b1-14a0-451a-b18d-586943970694",
+  "cloudBuildStatus": "SUCCESS",
+  "ciUrl": "https://github.com/ga22038/MultiCloud/actions/runs/38183535878",
+  "ciStatus": "SUCCESS",
+  "webImageDigest": "sha256:178d6e1367f7383c3a87d1bd771e25370dd787a3874023f73f769aa5c92caf5b",
+  "identicalImageAcrossClouds": true,
+  "sites": ["aws", "gcp"],
+  "teamUsers": ["CA21062", "LP21019", "SE21003", "SL21010", "JM21008"],
+  "teamRole": "Administrador",
+  "allTeamLoginsVerifiedOnBothClouds": true,
+  "databaseUsers": 7,
+  "revision": 9,
+  "operations": 9,
+  "stateSqlSha256": "bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1",
+  "replica": {
+    "io": "Yes",
+    "sql": "Yes",
+    "observedLagSeconds": 0,
+    "lastIoError": 0,
+    "lastSqlError": 0,
+    "tlsVerified": true,
+    "readOnly": true
+  },
+  "attribution": {
+    "evidence": "evidence-team-attribution.json",
+    "creator": "ca21062",
+    "editor": "jm21008",
+    "fixtureFinalBalanceGrams": 0,
+    "originalOrdersPreserved": true,
+    "forgedCreatorRejected": true
+  },
+  "welcome": {
+    "seconds": 6,
+    "personalized": true,
+    "skipButton": true,
+    "reducedMotionStyles": true,
+    "automaticEntryObserved": true,
+    "noWelcomeOnPageReload": true
+  },
+  "backup": {
+    "object": "mariadb/20261011T232004Z-409a3763.sql.gz",
+    "bytes": 8498,
+    "crc32c": "0td9WA==",
+    "privateLocalCopyRetained": true,
+    "isolatedRestoreVerified": true
+  },
+  "limitations": [
+    "Single-AZ RDS",
+    "NGINX direct multicloud backend failover remains pending",
+    "Full database promotion and failback remain pending",
+    "Shared passwords identify an account, not the person at the keyboard"
+  ]
+}
