@@ -1,0 +1,15 @@
+.gcloudignore
+.git
+.secrets
+.tools
+tmp
+node_modules
+app/node_modules
+app/.next
+app/*.tsbuildinfo
+app/.env*
+.env*
+infra
+docs
+coverage
+*.log

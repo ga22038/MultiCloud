@@ -1,6 +1,6 @@
 # Dominio y repositorio del laboratorio
 
-Consulta realizada el 11 de octubre de 2026. No se modificaron registros DNS.
+Actualizado el 11 de octubre de 2026. Se crearon dos registros DNS para Polaris UES.
 
 ## GitHub
 
@@ -12,9 +12,9 @@ Es público. Se verificó autenticación como `ga22038` con permiso de escritura
 
 El token permitió consultar `polarisenterprisesv.com`. Sus servidores DNS son `ns1.vercel-dns.com` y `ns2.vercel-dns.com`.
 
-La consulta no encontró registros A, AAAA, CNAME o NS con nombre `multicloud`. No equivale a haber creado o reservado el nombre.
+Se crearon registros A `gcp.multicloud` y `app.multicloud` con TTL 60, apuntando a `34.122.222.237`. Ambos sirven Polaris UES con HTTPS. No se modificaron los registros de las otras aplicaciones ni se delegó la zona a Route 53.
 
-Propuesta coherente con el Terraform existente:
+Diseño final previsto para incorporar AWS:
 
 | Nombre                                   | Función                                                                   |
 | ---------------------------------------- | ------------------------------------------------------------------------- |

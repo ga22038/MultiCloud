@@ -1,0 +1,32 @@
+name: polaris-ues-database
+services:
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Private database password required}
+    command:
+      [
+        "--server-id=2",
+        "--log-bin=polaris-bin",
+        "--binlog-format=ROW",
+        "--gtid-strict-mode=ON",
+        "--log-slave-updates=ON",
+        "--expire-logs-days=7",
+        "--require-secure-transport=ON",
+        "--ssl-ca=/etc/mariadb/tls/ca.pem",
+        "--ssl-cert=/etc/mariadb/tls/server-cert.pem",
+        "--ssl-key=/etc/mariadb/tls/server-key.pem",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--innodb-buffer-pool-size=256M",
+      ]
+    ports: ["10.20.1.3:3306:3306"]
+    volumes:
+      - /var/lib/polaris-ues/mysql:/var/lib/mysql
+      - /opt/polaris-ues/database-tls:/etc/mariadb/tls:ro
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      retries: 12

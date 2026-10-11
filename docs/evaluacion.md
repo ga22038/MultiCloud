@@ -2,19 +2,21 @@
 
 La guía entregada define componentes y pruebas, pero no proporciona una rúbrica numérica. Esta lista convierte esos requisitos en evidencias; no inventa ponderaciones.
 
-| Requisito            | Entrega preparada                                                    | Evidencia real pendiente                                        |
-| -------------------- | -------------------------------------------------------------------- | --------------------------------------------------------------- |
-| Aplicación funcional | Polaris UES con ocho módulos y reglas de inventario.                 | Demostración completa en las nubes.                             |
-| Frontend/backend/API | Next.js, capas separadas, contratos y roles de servidor.             | Acceso público HTTPS y cuentas individuales.                    |
-| Docker               | Imagen con etapas y Compose local/servidor/réplica.                  | Compilar y ejecutar contenedores con motor disponible.          |
-| NGINX                | Redundancia local de aplicación y configuración TLS por sitio.       | Corte real del primario y evidencia del respaldo.               |
-| Terraform            | AWS/GCP, redes, RDS Multi-AZ, VM MariaDB, VPN y DNS opcionales.      | Plan autenticado, revisión de costos, apply y recursos creados. |
-| Conectividad         | Cuatro túneles IPSec/BGP definidos.                                  | Estado de túneles, rutas y consultas privadas entre nubes.      |
-| MariaDB              | Persistencia local, transacciones y plantilla de réplica.            | Copia consistente y GTID replicando cambios reales.             |
-| Failover             | Readiness, bloqueo de escrituras y runbook de aislamiento/promoción. | Medición de RTO/RPO y conciliación de operaciones.              |
-| Failback             | Procedimiento que conserva escrituras de GCP.                        | Ensayo de retorno a AWS sin divergencias.                       |
-| Carga y monitoreo    | k6 de lectura, logs y auditoría.                                     | Resultados de carga, métricas cloud y alertas de lag.           |
-| Documentación        | Arquitectura, API, despliegue y recuperación.                        | Capturas y registro de cada ensayo con versión y fecha.         |
+Actualización del 11 de octubre de 2026: [Polaris UES está desplegado en GCP](despliegue-gcp.md), con HTTPS, contenedores, MariaDB privada, respaldo restaurado y prueba funcional completa. AWS y los ensayos entre nubes continúan pendientes.
+
+| Requisito            | Entrega preparada                                                           | Evidencia real pendiente                                    |
+| -------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Aplicación funcional | Ocho módulos y flujo completo de pedido comprobado en GCP.                  | Repetir en AWS y durante cortes entre nubes.                |
+| Frontend/backend/API | Next.js, capas separadas, HTTPS y sesión real en GCP.                       | Cuentas individuales adicionales para operadores.           |
+| Docker               | Imágenes construidas en Cloud Build y contenedores activos en GCP.          | Desplegar los contenedores del sitio AWS.                   |
+| NGINX                | Redundancia local de aplicación y configuración TLS por sitio.              | Corte real del primario y evidencia del respaldo.           |
+| Terraform            | Root GCP aplicado: 25 recursos y estado remoto; plan posterior sin cambios. | Integrar AWS sin duplicar el estado GCP existente.          |
+| Conectividad         | Cuatro túneles IPSec/BGP definidos.                                         | Estado de túneles, rutas y consultas privadas entre nubes.  |
+| MariaDB              | Base privada GCP con TLS, disco persistente y respaldo restaurado.          | Configurar réplica GTID desde AWS y comprobar retraso real. |
+| Failover             | Readiness, bloqueo de escrituras y runbook de aislamiento/promoción.        | Medición de RTO/RPO y conciliación de operaciones.          |
+| Failback             | Procedimiento que conserva escrituras de GCP.                               | Ensayo de retorno a AWS sin divergencias.                   |
+| Carga y monitoreo    | k6 preparado, auditoría y comprobación HTTPS de Cloud Monitoring.           | Carga medida, logs centrales y alertas operativas y de lag. |
+| Documentación        | Arquitectura, API, despliegue y recuperación.                               | Capturas y registro de cada ensayo con versión y fecha.     |
 
 ## Demostración funcional sugerida
 
@@ -31,9 +33,9 @@ La guía entregada define componentes y pruebas, pero no proporciona una rúbric
 ## Próximos pasos en orden
 
 1. Revisar interfaz y flujos con el usuario; ajustar campos del negocio y objetivos de evaluación.
-2. Restablecer Docker y completar el ensayo local de NGINX y la imagen.
-3. Verificar acceso AWS/GCP, cuotas, dominio propio y presupuesto del laboratorio.
-4. Revisar y ejecutar Terraform; instalar versión, TLS y permisos mínimos.
+2. Completar el ensayo local de redundancia NGINX cuando Docker Desktop esté disponible. Los contenedores de GCP ya están activos.
+3. Verificar acceso, créditos y cuotas AWS; considerar el vencimiento de la prueba GCP el 23 de octubre de 2026.
+4. Integrar y aplicar Terraform AWS; desplegar TLS y permisos mínimos conservando el estado GCP existente.
 5. Configurar y comprobar réplica GTID real antes de habilitar failover de datos.
 6. Completar monitoreo, carga, cortes, promoción, retorno y documentación de evidencias.
 

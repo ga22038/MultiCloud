@@ -2,6 +2,8 @@
 
 Responsable del proyecto: **ga22038**. Repositorio: [MultiCloud](https://github.com/ga22038/MultiCloud).
 
+Publicado en Google Cloud: [abrir Polaris UES](https://app.multicloud.polarisenterprisesv.com). Consultar [recursos, acceso y evidencias del despliegue GCP](docs/despliegue-gcp.md). AWS y la redundancia entre nubes siguen pendientes.
+
 Aplicación de inventario, pedidos, despacho y referencias de factura. Adaptación de Univar a Next.js, TypeScript y MariaDB para el proyecto académico multicloud AWS/GCP. El proyecto original permanece intacto.
 
 ## Módulos
@@ -117,4 +119,4 @@ Para AWS, usar un perfil CLI y no credenciales del usuario raíz. Para GCP, usar
 - [Verificación local y alcance pendiente](docs/verificacion-local.md)
 - [Ejemplos PDF con datos ficticios](docs/examples/)
 
-Terraform está preparado para revisión y validación. No se ejecutó `terraform apply`, crearon recursos cloud ni cambió el DNS. El despliegue, TLS, replicación GTID, VPN, promoción y retorno a AWS requieren ejecución y evidencias en las cuentas.
+El root `infra/terraform/gcp-only` se aplicó en Google Cloud y el DNS de Vercel apunta al sitio con HTTPS. El root multicloud sigue como diseño pendiente de integración con ese estado. Replicación GTID, VPN, failover y retorno a AWS requieren ejecución y evidencias.

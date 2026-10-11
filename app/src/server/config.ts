@@ -1,9 +1,10 @@
 import { readFileSync } from "node:fs";
 export function databaseConfig() {
+  const host = process.env.MARIADB_HOST || "127.0.0.1";
   const password = process.env.MARIADB_APP_PASSWORD;
   if (!password) throw new Error("Falta MARIADB_APP_PASSWORD.");
   return {
-    host: process.env.MARIADB_HOST || "127.0.0.1",
+    host,
     port: Number(process.env.MARIADB_PORT || 3307),
     user: process.env.MARIADB_APP_USER || "polaris_app",
     password,
@@ -17,6 +18,7 @@ export function databaseConfig() {
       ? {
           ssl: {
             ca: readFileSync(process.env.MARIADB_SSL_CA_FILE, "utf8"),
+            servername: process.env.MARIADB_SSL_SERVER_NAME || host,
             rejectUnauthorized: true,
           },
         }

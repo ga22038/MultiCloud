@@ -16,12 +16,22 @@ services:
       MARIADB_APP_USER: ${MARIADB_APP_USER}
       MARIADB_APP_PASSWORD: ${MARIADB_APP_PASSWORD}
       MARIADB_SSL_CA_FILE: /run/database-ca/ca.pem
+      MARIADB_SSL_SERVER_NAME: ${MARIADB_SSL_SERVER_NAME:-${MARIADB_HOST}}
       AUTH_SECRET: ${AUTH_SECRET}
       SESSION_COOKIE_SECURE: "true"
       APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS}
-    volumes: ["${DATABASE_CA_DIR:?Provide database CA certificates}:/run/database-ca:ro"]
+    volumes:
+      [
+        "${DATABASE_CA_DIR:?Provide database CA certificates}:/run/database-ca:ro",
+      ]
     healthcheck:
-      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      test:
+        [
+          CMD,
+          node,
+          -e,
+          "fetch('http://127.0.0.1:3000/api/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
       interval: 10s
       timeout: 5s
       retries: 6
@@ -37,4 +47,4 @@ services:
       - ${TLS_CERT_DIR:?Provide fullchain.pem and privkey.pem}:/etc/nginx/tls:ro
       - ${ACME_WEBROOT_DIR:?Provide ACME challenge directory}:/var/www/acme:ro
     depends_on:
-      app: {condition: service_started}
+      app: { condition: service_started }

@@ -19,6 +19,6 @@ La compilación y las comprobaciones HTTP se ejecutan con `npm run build` y `npm
 
 Docker Desktop no respondió; el laboratorio se ejecutó con MariaDB portátil y Next.js. No se comprobó el cambio entre contenedores en ejecución.
 
-No se crearon recursos en AWS/GCP ni se cambió el DNS. La VPN, TLS, replicación GTID, promoción del respaldo, retorno a AWS y mediciones de carga/RTO/RPO requieren despliegue y pruebas reales. Validar Terraform no demuestra que esas operaciones funcionen en las cuentas.
+Después de esta verificación local se creó la instalación GCP con DNS y HTTPS, descrita en [el informe de despliegue](despliegue-gcp.md). AWS, VPN, replicación GTID, promoción, retorno y mediciones de carga/RTO/RPO siguen pendientes. La comprobación local no demuestra recuperación entre nubes.
 
 Las credenciales permanecen en `.secrets/`, fuera de Git. La aplicación original permanece intacta.

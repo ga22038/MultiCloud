@@ -39,3 +39,5 @@ jobs:
       - run: terraform -chdir=infra/terraform fmt -check -recursive
       - run: terraform -chdir=infra/terraform init -backend=false -input=false
       - run: terraform -chdir=infra/terraform validate
+      - run: terraform -chdir=infra/terraform/gcp-only init -backend=false -input=false
+      - run: terraform -chdir=infra/terraform/gcp-only validate

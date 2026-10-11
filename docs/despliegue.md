@@ -1,6 +1,6 @@
 # Despliegue multicloud
 
-Estos pasos preparan un despliegue revisable. Todavía no se ejecutaron en AWS/GCP. Crear RDS Multi-AZ, máquinas, VPN, NAT, direcciones y comprobaciones DNS puede generar cargos; revisar el plan y las condiciones de las cuentas antes de aplicar.
+GCP ya tiene una instalación independiente publicada; consultar [el despliegue real y sus evidencias](despliegue-gcp.md). Este documento describe el diseño multicloud completo, todavía pendiente en AWS, VPN y replicación. Crear RDS Multi-AZ, máquinas, VPN, NAT, direcciones y comprobaciones DNS consume recursos y puede generar cargos.
 
 ## Recursos definidos
 
@@ -30,7 +30,7 @@ rtk terraform -chdir=infra/terraform validate
 rtk terraform -chdir=infra/terraform plan
 ```
 
-`validate` comprueba la configuración y el esquema de los proveedores. `plan` requiere autenticación y consulta recursos reales. La validación local no confirma cuotas, disponibilidad regional, rutas BGP ni capacidad de la cuenta. No se ejecutó `plan` ni `apply` durante la adaptación.
+`validate` comprueba la configuración y el esquema de los proveedores. `plan` requiere autenticación y consulta recursos reales. El root multicloud no se aplicó. El root separado `gcp-only` sí tiene estado remoto y recursos creados; no aplicar ambos roots sobre los mismos componentes sin importación y refactorización.
 
 Antes de aplicar, configurar un backend de estado remoto cifrado y con acceso limitado. Las claves compartidas de VPN pueden aparecer en el estado, aunque las salidas no las muestren. No subir estados o planes a Git. Las protecciones de RDS, VM y disco de datos evitan un borrado accidental; no retirarlas para resolver un error de Terraform sin revisar respaldos.
 
@@ -66,7 +66,7 @@ Referencias: [replicación GTID de MariaDB](https://mariadb.com/docs/server/ha-a
 
 Si controlas un dominio propio en Vercel, puedes delegar un subdominio de laboratorio a los nameservers de Route 53. Configurar `dns_zone_name`, revisar el plan, crear la zona y después añadir únicamente los registros NS del subdominio en el proveedor del dominio. Esto no requiere mover la web existente.
 
-Los registros definidos son `aws.<zona>`, `gcp.<zona>` y `app.<zona>`. El último usa failover y comprobaciones de `/api/health/ready`. Primero instalar TLS válido y verificar ambos sitios. No se modificó Vercel ni el DNS durante esta adaptación. Si solo tienes un hostname `*.vercel.app`, no puedes delegar su zona como si fuera un dominio propio.
+El diseño define `aws.<zona>`, `gcp.<zona>` y `app.<zona>`, con failover para el último. Actualmente Vercel tiene dos registros A, `gcp.multicloud` y `app.multicloud`, apuntando al único sitio GCP. Todavía no hay delegación NS ni failover DNS. Si solo tienes un hostname `*.vercel.app`, no puedes delegar su zona como si fuera un dominio propio.
 
 ## Observabilidad y respaldo
 

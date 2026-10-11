@@ -1,0 +1,9 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: [build, --target, web, -t, "${_IMAGE}", .]
+  - name: gcr.io/cloud-builders/docker
+    args: [build, --target, migrate, -t, "${_MIGRATION_IMAGE}", .]
+images: ["${_IMAGE}", "${_MIGRATION_IMAGE}"]
+options:
+  logging: CLOUD_LOGGING_ONLY
+timeout: 1200s
