@@ -20,7 +20,7 @@ Compartir la misma contraseña reduce la certeza de autoría: alguien que conoce
 
 ## Bienvenida
 
-El acceso conserva la paleta azul grafito y gris, con una estrella Polaris y órbitas de profundidad hechas en CSS. Después de autenticar correctamente y cargar los datos, aparece una bienvenida personalizada durante **6 segundos**, con rol y botón **Entrar ahora**. El efecto se inspira en la transición de `C:\Dev\Polaris 1.1`, sin modificar ese proyecto.
+El acceso conserva la paleta azul grafito y gris, con una imagen PNG original de la Tierra y Polaris. El formulario incluye mostrar/ocultar contraseña, recordar solamente el usuario y ayuda de acceso; la fotografía desaparece en móvil. Después de autenticar correctamente y cargar los datos, aparece una bienvenida personalizada durante **6 segundos**, con rol y botón **Entrar ahora**. El efecto se inspira en la transición de `C:\Dev\Polaris 1.1`, sin modificar ese proyecto. [Diseño y verificaciones](login-space-design.md).
 
 La bienvenida aparece una vez por inicio de sesión, no al actualizar la página ni al cambiar módulos. Los temporizadores se cancelan al salir. El movimiento decorativo se reduce con `prefers-reduced-motion`. La barra representa el tiempo de bienvenida; no simula progreso de la base de datos ni de la autenticación.
 

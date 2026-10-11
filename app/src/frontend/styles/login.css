@@ -1,0 +1,405 @@
+/* Calm split access, inspired by b.well and expressed in Polaris' slate palette. */
+.access-page svg.lucide {
+  color: currentColor !important;
+}
+.access-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(24px, 4vw, 60px);
+  background: #f5f5f3;
+  color: #263d50;
+}
+.access-shell {
+  display: grid;
+  grid-template-columns: 1.04fr 1fr;
+  width: min(1160px, 100%);
+  min-height: 670px;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid #dce1e5;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 65px #243b5007;
+}
+.access-visual {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  isolation: isolate;
+  padding: 38px 42px;
+  color: #fff;
+  background-color: #142b40;
+  background-size: cover;
+  background-position: center;
+}
+.access-visual::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    #12263830,
+    transparent 36%,
+    #0c20374d 62%,
+    #0b1d30db
+  );
+}
+.access-visual::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 0;
+  height: 100%;
+  width: 28px;
+  background: #fff;
+  clip-path: ellipse(90% 55% at 100% 50%);
+  pointer-events: none;
+}
+.access-visual-label,
+.access-kicker {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+}
+.access-visual-label {
+  color: #dce6ef;
+}
+.access-story {
+  margin-top: 300px;
+}
+.access-kicker {
+  color: #d1dde8;
+  letter-spacing: 1.5px;
+}
+.access-story h2 {
+  color: #fff;
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 480;
+  letter-spacing: -1.5px;
+  line-height: 1.17;
+  margin: 17px 0;
+}
+.access-story p {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #d5e0e9;
+  margin: 0;
+}
+.access-visual-footer {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #d7e3ee33;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.6px;
+}
+.access-visual-footer span {
+  color: #c9d7e2;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.access-form-panel {
+  display: grid;
+  place-items: center;
+  padding: 42px clamp(28px, 4vw, 64px);
+}
+.access-form-content {
+  width: 100%;
+  max-width: 355px;
+}
+.access-wordmark {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  font-size: 32px;
+  font-weight: 650;
+  letter-spacing: -1.4px;
+}
+.access-wordmark > span > span {
+  color: #7b8b9a;
+  font-weight: 400;
+}
+.access-brand-note {
+  text-align: center;
+  color: #718291;
+  font-size: 11px;
+  margin: 6px 0 0;
+}
+.access-heading {
+  margin: 38px 0 28px;
+}
+.access-heading h1 {
+  color: #263d50;
+  font-size: 27px;
+  line-height: 1.2;
+  letter-spacing: -0.9px;
+  font-weight: 550;
+  margin: 0;
+}
+.access-heading p {
+  font-size: 13px;
+  color: #71808d;
+  margin: 11px 0 0;
+}
+.access-form {
+  display: flex;
+  flex-direction: column;
+}
+.access-form > label:not(.access-remember) {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 9px;
+}
+.access-input {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: 1px solid #dce2e7;
+  border-radius: 7px;
+  background: #fff;
+  color: #7b8995;
+  margin-bottom: 21px;
+  min-height: 49px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+.access-input > svg {
+  flex-shrink: 0;
+  margin-left: 14px;
+}
+.access-input:focus-within {
+  border-color: #617b91;
+  box-shadow: 0 0 0 3px #536c8414;
+}
+.access-input input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 47px;
+  padding: 0 12px;
+  background: transparent;
+  border: 0;
+  border-radius: inherit;
+  outline: none;
+  box-shadow: none;
+  font-size: 14px;
+  color: #263d50;
+}
+.access-input input:focus {
+  outline: none;
+  box-shadow: none;
+  border: 0;
+}
+.access-input input::placeholder {
+  color: #8a959f;
+  font-size: 12px;
+}
+.access-password-toggle {
+  background: transparent;
+  border: 0;
+  color: #718493;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  margin-right: 2px;
+}
+.access-password-toggle:hover {
+  color: #263d50;
+  background: #f3f5f6;
+}
+.access-form .access-remember {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 12px;
+  color: #637685;
+  min-height: 32px;
+  align-self: flex-start;
+  margin: -8px 0 20px;
+  cursor: pointer;
+}
+.access-remember input[type="checkbox"] {
+  appearance: auto;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  accent-color: #344f65;
+}
+.access-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 48px;
+  padding: 12px 20px;
+  border: 1px solid #314b61;
+  border-radius: 28px;
+  background: #314b61;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 550;
+  transition:
+    background-color 150ms ease,
+    transform 120ms ease;
+}
+.access-submit:hover:not(:disabled) {
+  background: #253f54;
+}
+.access-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.access-submit svg {
+  color: inherit;
+}
+.access-error {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #a62e38;
+  margin: -5px 0 16px;
+}
+.access-help {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 11px;
+  color: #60798d;
+}
+.access-help summary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+  cursor: pointer;
+  list-style: none;
+  text-underline-offset: 3px;
+}
+.access-help summary::-webkit-details-marker {
+  display: none;
+}
+.access-help summary:hover {
+  text-decoration: underline;
+}
+.access-help > div {
+  margin-top: 10px;
+  padding: 14px;
+  border: 1px solid #e0e6eb;
+  border-radius: 8px;
+  background: #f5f7f9;
+  text-align: left;
+  line-height: 1.7;
+  color: #536a7c;
+}
+.access-device-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #6f8292;
+  padding-top: 25px;
+  margin-top: 20px;
+  border-top: 1px solid #e8ecf0;
+}
+.access-account-note {
+  color: #87939e;
+  font-size: 10px;
+  text-align: center;
+  line-height: 1.65;
+  margin: 17px 0 0;
+}
+.access-footer {
+  width: min(1160px, 100%);
+  margin: 19px auto 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #84929c;
+  font-size: 10px;
+}
+@media (min-width: 801px) {
+  .access-visual {
+    background-image: url("/images/polaris-earth-v1.png");
+  }
+}
+@media (max-width: 1000px) and (min-width: 801px) {
+  .access-page {
+    padding: 28px;
+  }
+  .access-visual {
+    padding: 32px 28px;
+  }
+  .access-story h2 {
+    font-size: 32px;
+  }
+  .access-form-panel {
+    padding-inline: 28px;
+  }
+  .access-heading h1 {
+    font-size: 25px;
+  }
+}
+@media (max-width: 800px) {
+  .access-page {
+    padding: 30px 20px 24px;
+    background: #fff;
+    justify-content: flex-start;
+  }
+  .access-shell {
+    display: block;
+    min-height: 0;
+    width: 100%;
+    max-width: 460px;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .access-visual {
+    display: none;
+  }
+  .access-form-panel {
+    padding: 20px 12px;
+  }
+  .access-form-content {
+    max-width: 355px;
+  }
+  .access-wordmark {
+    font-size: 34px;
+  }
+  .access-heading {
+    margin-top: 48px;
+  }
+  .access-input input {
+    font-size: 16px;
+  }
+  .access-footer {
+    max-width: 355px;
+    margin-top: auto;
+    padding-top: 28px;
+    flex-direction: column;
+    text-align: center;
+    gap: 6px;
+    font-size: 9px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .access-submit,
+  .access-input {
+    transition: none;
+  }
+  .access-submit:active:not(:disabled) {
+    transform: none;
+  }
+}
