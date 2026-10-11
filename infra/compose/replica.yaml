@@ -1,0 +1,17 @@
+name: polaris-ues-replica
+services:
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?Define private root password}
+    command: ["--server-id=2", "--log-bin=polaris-bin", "--relay-log=polaris-relay", "--binlog-format=ROW", "--gtid-strict-mode=ON", "--log-slave-updates=ON", "--replicate-wild-do-table=polaris_ues.%", "--read-only=ON", "--require-secure-transport=ON", "--ssl-ca=/etc/mariadb/tls/ca.pem", "--ssl-cert=/etc/mariadb/tls/server-cert.pem", "--ssl-key=/etc/mariadb/tls/server-key.pem", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports: ["${PRIVATE_BIND_IP:?Bind only the Compute Engine private IP}:3306:3306"]
+    volumes:
+      - ${DATABASE_DATA_DIR:?Use mounted persistent data disk}:/var/lib/mysql
+      - ${DATABASE_TLS_DIR:?Provide CA, server certificate and key}:/etc/mariadb/tls:ro
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 10s
+      timeout: 5s
+      retries: 12

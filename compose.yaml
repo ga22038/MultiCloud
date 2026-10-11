@@ -1,0 +1,96 @@
+name: polaris-ues
+x-database-env: &database-env
+  MARIADB_HOST: mariadb
+  MARIADB_PORT: "3306"
+  MARIADB_DATABASE: ${MARIADB_DATABASE:?Run npm run local:init}
+  MARIADB_APP_USER: ${MARIADB_APP_USER}
+  MARIADB_APP_PASSWORD: ${MARIADB_APP_PASSWORD}
+x-app: &app
+  image: polaris-ues:local
+  build: { context: ., target: web }
+  restart: unless-stopped
+  read_only: true
+  tmpfs: ["/tmp", "/workspace/app/.next/cache:uid=1000,gid=1000"]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  environment: &app-env
+    <<: *database-env
+    AUTH_SECRET: ${AUTH_SECRET}
+    APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS}
+    SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-false}
+  depends_on:
+    migrate: { condition: service_completed_successfully }
+  healthcheck:
+    test:
+      [
+        CMD,
+        node,
+        -e,
+        "fetch('http://127.0.0.1:3000/api/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+      ]
+    interval: 10s
+    timeout: 5s
+    retries: 6
+    start_period: 30s
+services:
+  mariadb:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_APP_USER}
+      MARIADB_PASSWORD: ${MARIADB_APP_PASSWORD}
+    command:
+      [
+        "--server-id=1",
+        "--log-bin=polaris-bin",
+        "--binlog-format=ROW",
+        "--gtid-strict-mode=ON",
+        "--log-slave-updates=ON",
+        "--expire-logs-days=7",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
+    ports: ["127.0.0.1:3307:3306"]
+    volumes: ["mariadb-data:/var/lib/mysql"]
+    healthcheck:
+      test: [CMD, healthcheck.sh, --connect, --innodb_initialized]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+  migrate:
+    build: { context: ., target: migrate }
+    environment:
+      <<: *database-env
+      BOOTSTRAP_ADMIN_PASSWORD: ${BOOTSTRAP_ADMIN_PASSWORD}
+      SEED_DEMO_USERS: ${SEED_DEMO_USERS:-false}
+    depends_on:
+      mariadb: { condition: service_healthy }
+    restart: "no"
+  app-primary:
+    <<: *app
+    environment:
+      <<: *app-env
+      SITE_NAME: aws-lab
+  app-backup:
+    <<: *app
+    environment:
+      <<: *app-env
+      SITE_NAME: gcp-lab
+  nginx:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports: ["127.0.0.1:8080:8080"]
+    volumes: ["./infra/nginx/local.conf:/etc/nginx/nginx.conf:ro"]
+    depends_on:
+      app-primary: { condition: service_healthy }
+      app-backup: { condition: service_healthy }
+    healthcheck:
+      test:
+        [CMD, wget, -q, -O, /dev/null, "http://127.0.0.1:8080/api/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+volumes:
+  mariadb-data:

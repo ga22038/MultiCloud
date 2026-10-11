@@ -1,0 +1,34 @@
+{
+  "name": "polaris-ues",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "app"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "local:init": "node scripts/setup-local.mjs",
+    "dev": "node scripts/run-next.mjs dev",
+    "build": "npm run build --workspace=app",
+    "start": "node scripts/run-next.mjs start",
+    "typecheck": "npm run typecheck --workspace=app",
+    "lint": "npm run lint --workspace=app",
+    "format": "prettier --write app/src app/tests app/scripts scripts/*.mjs scripts/*.ts package.json app/package.json compose.yaml .github/workflows/ci.yml README.md docs/*.md",
+    "format:check": "prettier --check app/src app/tests app/scripts scripts/*.mjs scripts/*.ts package.json app/package.json compose.yaml .github/workflows/ci.yml README.md docs/*.md",
+    "test": "npm run test --workspace=app",
+    "test:integration": "node scripts/test-database.mjs",
+    "test:api": "node scripts/smoke-api.mjs",
+    "docs:api": "node --import tsx scripts/export-openapi.ts",
+    "docs:pdf": "node --import tsx scripts/export-examples.ts",
+    "db:setup": "node --env-file=.secrets/runtime.env --import tsx app/scripts/setup-db.ts",
+    "db:local": "node --env-file=.secrets/runtime.env --import tsx scripts/local-db.ts start",
+    "db:install": "node scripts/install-local-db.mjs",
+    "db:stop": "node --env-file=.secrets/runtime.env --import tsx scripts/local-db.ts stop",
+    "local:up": "docker compose --env-file .secrets/runtime.env up --build -d --wait",
+    "local:status": "docker compose --env-file .secrets/runtime.env ps",
+    "local:down": "docker compose --env-file .secrets/runtime.env down"
+  }
+}

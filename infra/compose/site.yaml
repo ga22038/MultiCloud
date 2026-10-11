@@ -1,0 +1,40 @@
+name: polaris-ues-site
+services:
+  app:
+    image: ${POLARIS_IMAGE:?Define an immutable release image}
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: ["/tmp", "/workspace/app/.next/cache:uid=1000,gid=1000"]
+    environment:
+      SITE_NAME: ${SITE_NAME}
+      APP_WRITES_ENABLED: ${APP_WRITES_ENABLED:-false}
+      MARIADB_HOST: ${MARIADB_HOST}
+      MARIADB_PORT: ${MARIADB_PORT:-3306}
+      MARIADB_DATABASE: ${MARIADB_DATABASE:-polaris_ues}
+      MARIADB_APP_USER: ${MARIADB_APP_USER}
+      MARIADB_APP_PASSWORD: ${MARIADB_APP_PASSWORD}
+      MARIADB_SSL_CA_FILE: /run/database-ca/ca.pem
+      AUTH_SECRET: ${AUTH_SECRET}
+      SESSION_COOKIE_SECURE: "true"
+      APP_ALLOWED_ORIGINS: ${APP_ALLOWED_ORIGINS}
+    volumes: ["${DATABASE_CA_DIR:?Provide database CA certificates}:/run/database-ca:ro"]
+    healthcheck:
+      test: [CMD, node, -e, "fetch('http://127.0.0.1:3000/api/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+  nginx:
+    image: nginx:1.28-alpine
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
+      NGINX_ENVSUBST_FILTER: PUBLIC_DOMAIN
+    volumes:
+      - ../nginx/site.conf.template:/etc/nginx/templates/default.conf.template:ro
+      - ${TLS_CERT_DIR:?Provide fullchain.pem and privkey.pem}:/etc/nginx/tls:ro
+      - ${ACME_WEBROOT_DIR:?Provide ACME challenge directory}:/var/www/acme:ro
+    depends_on:
+      app: {condition: service_started}

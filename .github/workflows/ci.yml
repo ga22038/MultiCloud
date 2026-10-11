@@ -1,0 +1,41 @@
+name: Polaris UES checks
+on: [push, pull_request]
+permissions: { contents: read }
+jobs:
+  application:
+    runs-on: ubuntu-latest
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ROOT_PASSWORD: ephemeral-ci-password-only
+          MARIADB_ROOT_HOST: "%"
+        ports: ["3307:3306"]
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=5s --health-timeout=5s --health-retries=20
+    env:
+      MARIADB_HOST: 127.0.0.1
+      MARIADB_PORT: 3307
+      MARIADB_ROOT_PASSWORD: ephemeral-ci-password-only
+      BOOTSTRAP_ADMIN_PASSWORD: ephemeral-ci-admin-password-only
+      SEED_DEMO_USERS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 24, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+      - run: npm run test:integration
+      - run: npm run build
+      - run: docker build --target web -t polaris-ues:ci .
+      - run: docker run --rm --mount type=bind,src="$PWD/infra/nginx/local.conf",dst=/etc/nginx/nginx.conf,readonly nginx:1.28-alpine nginx -t
+  infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with: { terraform_version: 1.13.4 }
+      - run: terraform -chdir=infra/terraform fmt -check -recursive
+      - run: terraform -chdir=infra/terraform init -backend=false -input=false
+      - run: terraform -chdir=infra/terraform validate
