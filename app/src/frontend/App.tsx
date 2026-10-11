@@ -1,5 +1,6 @@
 import type { Command } from "../commands";
 import { Login } from "./Login";
+import { Welcome } from "./Welcome";
 import { useEffect, useRef, useState } from "react";
 import {
   LayoutDashboard,
@@ -17,6 +18,7 @@ import {
   Menu,
   X,
   ExternalLink,
+  History,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { Actor, Role, Order, CatalogKind } from "../domain";
@@ -30,8 +32,10 @@ import {
   recoverData,
   hasPendingOperation,
   signOut,
+  dismissWelcome,
 } from "./store";
 import { Modal } from "./components";
+import { AuditView } from "./AuditView";
 import { orderPdf } from "./documents";
 import {
   CatalogForm,
@@ -59,6 +63,7 @@ export type View =
   | "inventory"
   | "kardex"
   | "catalogs"
+  | "audit"
   | "settings";
 type Dialog =
   | { type: "new-order" | "receipt" | "writeoff" }
@@ -75,6 +80,7 @@ const titles: Record<View, string> = {
   inventory: "Inventario",
   kardex: "Kardex",
   catalogs: "Catálogos",
+  audit: "Auditoría",
   settings: "Configuración",
 };
 const nav: { view: View; label: string; icon: LucideIcon }[] = [
@@ -85,6 +91,7 @@ const nav: { view: View; label: string; icon: LucideIcon }[] = [
   { view: "inventory", label: "Inventario", icon: Package },
   { view: "kardex", label: "Kardex", icon: ArrowLeftRight },
   { view: "catalogs", label: "Catálogos", icon: Users },
+  { view: "audit", label: "Auditoría", icon: History },
 ];
 const roles: Role[] = ["Administrador", "Customer", "Logística", "Facturación"];
 
@@ -217,6 +224,14 @@ export default function App() {
       ? state.orders.find((o) => o.id === dialog.id)
       : undefined;
   if (connection.status === "unauthenticated") return <Login />;
+  if (connection.welcome && connection.status === "ready")
+    return (
+      <Welcome
+        name={connection.name}
+        role={connection.role}
+        onComplete={dismissWelcome}
+      />
+    );
   return (
     <div className={`app-shell ${sidebarOpen ? "" : "sidebar-hidden"}`}>
       <a className="skip-link" href="#main">
@@ -482,6 +497,7 @@ export default function App() {
               }
             />
           )}
+          {view === "audit" && <AuditView state={state} />}
           {view === "settings" && (
             <SettingsView state={state} isAdmin={role === "Administrador"} />
           )}

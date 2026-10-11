@@ -197,6 +197,13 @@ export async function createOrderReport(
     reference: order.number,
     metadata: [
       ["Cliente", customer?.name || "No disponible"],
+      ["Creado por", order.createdBy || "Sin registro histórico"],
+      [
+        "Última modificación",
+        order.updatedBy
+          ? `${order.updatedBy} / ${dateLabel(order.updatedAt || "", true)}`
+          : "Sin cambios registrados",
+      ],
       [
         "Identificación / Ciudad",
         `${customer?.nit || ""} / ${customer?.city || ""}`,
@@ -251,7 +258,16 @@ export function createOrdersReport(
       ["Registros", String(orders.length)],
       ["Alcance", "Registros que cumplen los filtros actuales."],
     ],
-    head: ["Pedido", "Cliente", "Creación", "Estado", "Cantidad kg", "Factura"],
+    head: [
+      "Pedido",
+      "Cliente",
+      "Creación",
+      "Estado",
+      "Cantidad kg",
+      "Factura",
+      "Creado por",
+      "Última modificación por",
+    ],
     numeric: [4],
     rows: orders.map((order) => [
       order.number,
@@ -260,6 +276,8 @@ export function createOrdersReport(
       order.status,
       kg(order.lines.reduce((sum, line) => sum + line.grams, 0)),
       order.invoice || "Pendiente",
+      order.createdBy || "Sin registro histórico",
+      order.updatedBy || "Sin cambios registrados",
     ]),
   });
 }
@@ -281,6 +299,8 @@ export function createInventoryReport(state: State, stocks: Stock[]) {
       "Existencias kg",
       "Reservado kg",
       "Disponible kg",
+      "Creado por",
+      "Última modificación por",
     ],
     numeric: [5, 6, 7],
     rows: stocks.map((stock) => {
@@ -297,6 +317,8 @@ export function createInventoryReport(state: State, stocks: Stock[]) {
         kg(balance(state, stock.id)),
         kg(reserved(state, stock.id)),
         kg(expired(stock) ? 0 : available(state, stock.id)),
+        stock.createdBy || "Sin registro histórico",
+        stock.updatedBy || "Sin cambios registrados",
       ];
     }),
   });

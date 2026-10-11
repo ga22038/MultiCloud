@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../frontend/styles/global.css";
 import "../frontend/styles/styles.css";
 import "../frontend/styles/polaris.css";
+import "../frontend/styles/access.css";
 export const metadata: Metadata = {
   title: "Polaris UES",
   description: "Gestión de inventario, pedidos y operaciones multicloud.",

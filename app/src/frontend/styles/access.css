@@ -1,0 +1,618 @@
+/* Polaris access: the existing graphite/slate palette, with a spatial north star. */
+.login-page {
+  grid-template-columns: 1.08fr 1fr;
+  gap: 0;
+  padding: 0;
+  background: #f4f6f8;
+  isolation: isolate;
+}
+.login-intro {
+  min-height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  padding: 42px clamp(32px, 5vw, 88px) 40px;
+  background: radial-gradient(
+    ellipse at 65% 35%,
+    #3c5266 0,
+    #293e51 34%,
+    #1e2f40 78%
+  );
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #fff;
+}
+.login-intro::before,
+.welcome-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#cbd5df16 0.7px, transparent 0.7px);
+  background-size: 5px 5px;
+}
+.login-brand,
+.welcome-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 650;
+  letter-spacing: -0.7px;
+}
+.login-brand {
+  position: absolute;
+  top: 36px;
+  left: clamp(32px, 5vw, 88px);
+}
+.login-brand > span:last-child,
+.welcome-brand > span:last-child {
+  font-weight: 400;
+  opacity: 0.65;
+  margin-left: -4px;
+}
+.polaris-monogram {
+  display: inline-grid;
+  place-items: center;
+  width: 33px;
+  height: 36px;
+  margin-right: 3px;
+  border: 1px solid #cbd5df4d;
+  border-radius: 10px 3px 10px 3px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.login-story {
+  position: relative;
+  z-index: 1;
+  margin-top: 330px;
+}
+.login-intro .login-eyebrow {
+  color: #b2c0cd;
+  font-size: 10px;
+  letter-spacing: 2.3px;
+}
+.login-intro h1 {
+  color: #f6f8fa;
+  font-size: clamp(34px, 3.8vw, 62px);
+  font-weight: 550;
+  letter-spacing: -2.5px;
+  line-height: 1.12;
+  margin: 20px 0;
+}
+.login-intro h1 span {
+  color: #a6b8c9;
+  font-weight: 400;
+}
+.login-story p {
+  font-size: clamp(14px, 1.15vw, 17px);
+  line-height: 1.75;
+  color: #c2cdd7;
+}
+.login-intro .login-note {
+  color: #c2cdd7;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #b3c2d127;
+  font-size: 12px;
+  gap: 10px;
+}
+.login-form-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px clamp(24px, 4vw, 72px);
+  min-height: 100dvh;
+  position: relative;
+}
+.login-card {
+  padding: 42px;
+  max-width: 460px;
+  border-radius: 22px;
+  box-shadow:
+    0 20px 60px #22354807,
+    0 2px 4px #22354803;
+  position: relative;
+}
+.login-card .login-eyebrow {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+}
+.login-access-mark {
+  display: grid;
+  place-items: center;
+  color: #34495d;
+  background: #f0f3f6;
+  border: 1px solid #e4e9ee;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 28px;
+}
+.login-card h2 {
+  font-size: clamp(30px, 3vw, 40px);
+  letter-spacing: -1.5px;
+  font-weight: 550;
+  line-height: 1.15;
+  margin-top: 18px;
+}
+.login-card p {
+  font-size: 13px;
+  margin-top: 14px;
+}
+.login-card label {
+  font-size: 12px;
+}
+.login-card input {
+  min-height: 46px;
+  font-size: 15px;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+.login-card input:focus-visible {
+  outline: 2px solid #506a823d;
+  outline-offset: 2px;
+  border-color: #657b90;
+}
+.login-card small {
+  font-size: 11px;
+}
+.login-card .button {
+  min-height: 46px;
+  border-radius: 9px;
+  font-size: 12px;
+}
+.login-footer {
+  position: static;
+  width: min(460px, 100%);
+  margin-top: 26px;
+  font-size: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  line-height: 1.5;
+}
+.login-footer span {
+  text-align: right;
+  color: #6e7e8d;
+}
+.polaris-orbit {
+  position: absolute;
+  width: min(440px, 85%);
+  aspect-ratio: 1;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  perspective: 650px;
+}
+.orbit-grid {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid #b0c0d01a;
+  background: radial-gradient(circle, #cbd9e517 0, transparent 66%);
+}
+.orbit-track {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px solid #c0cfde50;
+  box-shadow: 0 1px 0 #ffffff12;
+  transform: rotateX(61deg) rotateZ(-30deg);
+}
+.orbit-track-one {
+  animation: orbit-sway 6s cubic-bezier(0.77, 0, 0.175, 1) both;
+}
+.orbit-track-two {
+  inset: 19%;
+  transform: rotateX(51deg) rotateY(48deg) rotateZ(35deg);
+  border-color: #b0c2d12e;
+}
+.orbit-track-three {
+  inset: 27%;
+  transform: rotateX(15deg) rotateY(64deg) rotateZ(-30deg);
+  border-color: #e3edf55c;
+}
+.orbit-axis {
+  position: absolute;
+  top: 18%;
+  bottom: 18%;
+  left: 50%;
+  width: 1px;
+  background: linear-gradient(transparent, #d0deeb36, transparent);
+  transform: rotate(38deg);
+}
+.polaris-star {
+  position: absolute;
+  inset: 32%;
+  filter: drop-shadow(0 15px 15px #0f1f3050);
+  animation: star-arrive 250ms cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+.polaris-star::before,
+.polaris-star span {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(
+    50% 0,
+    60% 36%,
+    79% 21%,
+    65% 42%,
+    100% 50%,
+    65% 58%,
+    79% 79%,
+    58% 65%,
+    50% 100%,
+    42% 65%,
+    21% 79%,
+    35% 58%,
+    0 50%,
+    35% 42%,
+    21% 21%,
+    42% 35%
+  );
+  background: conic-gradient(
+    from 0deg,
+    #f5f8fb,
+    #8b9fb2 45deg,
+    #dce6ef 90deg,
+    #526b82 135deg,
+    #a2b5c6 180deg,
+    #eaf1f7 225deg,
+    #6d8397 270deg,
+    #bccbd8 315deg,
+    #f5f8fb
+  );
+}
+.polaris-star span {
+  inset: 3%;
+  background: conic-gradient(
+    from 0deg,
+    #eff5fa,
+    #b9cbdc 50deg,
+    #69839b 100deg,
+    #bccbd8 170deg,
+    #f5f8fb 240deg,
+    #859eb4 300deg,
+    #eff5fa
+  );
+}
+.orbit-point {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d7e4ef;
+  box-shadow:
+    0 0 0 5px #c3d7e610,
+    0 0 16px #d7e4ef40;
+}
+.orbit-point-one {
+  left: 18%;
+  top: 51%;
+}
+.orbit-point-two {
+  right: 22%;
+  top: 28%;
+  width: 4px;
+  height: 4px;
+  opacity: 0.65;
+}
+.orbit-caption {
+  position: absolute;
+  bottom: 6%;
+  width: 100%;
+  text-align: center;
+  color: #a6bacb;
+  font-size: 8px;
+  letter-spacing: 2.4px;
+}
+.login-intro .orbit-caption {
+  display: none;
+}
+.welcome-page {
+  min-height: 100dvh;
+  padding: 38px 5vw 28px;
+  background: radial-gradient(
+    ellipse at 75% 40%,
+    #41576a,
+    #263c50 38%,
+    #1e2f40 80%
+  );
+  color: #f5f7f9;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.welcome-brand {
+  position: relative;
+  z-index: 1;
+}
+.welcome-content {
+  animation: welcome-arrive 250ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  position: relative;
+  width: min(940px, 100%);
+  align-self: center;
+  display: grid;
+  grid-template-columns: 1fr 310px;
+  padding: 48px 50px 28px;
+  border-radius: 32px 14px 32px 14px;
+  border: 1px solid #bacbda27;
+  background: linear-gradient(120deg, #5267792b, #15293d8c);
+  box-shadow:
+    inset 0 1px 0 #d7e4ef17,
+    0 35px 100px #0e203840;
+  backdrop-filter: blur(16px);
+  margin: 40px 0;
+}
+.welcome-content > :not(.polaris-orbit) {
+  grid-column: 1;
+}
+.welcome-content .login-eyebrow {
+  color: #bbcad7;
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+.welcome-content h1 {
+  color: #f5f7f9;
+  font-size: clamp(32px, 4vw, 52px);
+  line-height: 1.12;
+  letter-spacing: -1.8px;
+  font-weight: 450;
+  margin: 24px 0 12px;
+  outline: none;
+}
+.welcome-content h1 span {
+  display: block;
+  color: #b7cbdc;
+  overflow-wrap: anywhere;
+}
+.welcome-content > p {
+  color: #bdcbd7;
+  font-size: 14px;
+  line-height: 1.65;
+  margin-bottom: 24px;
+}
+.welcome-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #c2d0dc;
+  font-size: 11px;
+}
+.welcome-divider {
+  width: 1px;
+  height: 12px;
+  background: #b9cadb40;
+}
+.welcome-content .welcome-enter {
+  justify-self: start;
+  min-height: 42px;
+  margin-top: 30px;
+  color: #273e53;
+  background: #e4edf4;
+  border: 1px solid #e4edf4;
+  gap: 20px;
+  padding-inline: 20px;
+  font-size: 12px;
+}
+.welcome-content .welcome-timing {
+  grid-column: 1 / -1;
+  margin-top: 32px;
+  color: #a8bccd;
+  font-size: 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 24px;
+  border-top: 1px solid #c8d5e024;
+  padding-top: 22px;
+}
+.welcome-progress {
+  height: 2px;
+  background: #d4e0eb21;
+  overflow: hidden;
+}
+.welcome-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #cbdce9;
+  transform-origin: left;
+  animation: welcome-progress 6s linear forwards;
+}
+.welcome-content .polaris-orbit {
+  grid-column: 2;
+  position: absolute;
+  width: 310px;
+  top: 50%;
+  left: auto;
+  right: 30px;
+  transform: translateY(-60%);
+}
+.welcome-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #a7bacb;
+  font-size: 10px;
+  position: relative;
+  line-height: 1.5;
+}
+.welcome-footer > span {
+  font-size: 8px;
+  letter-spacing: 1.6px;
+}
+@keyframes orbit-sway {
+  from {
+    transform: rotateX(61deg) rotateZ(-42deg);
+    opacity: 0.4;
+  }
+  to {
+    transform: rotateX(61deg) rotateZ(-30deg);
+    opacity: 1;
+  }
+}
+@keyframes star-arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes welcome-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes welcome-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (max-height: 780px) and (min-width: 801px) {
+  .polaris-orbit {
+    width: min(360px, 80%);
+    top: 70px;
+  }
+  .login-story {
+    margin-top: 280px;
+  }
+  .login-intro h1 {
+    font-size: 44px;
+  }
+  .login-card {
+    padding: 30px 36px;
+  }
+  .login-access-mark {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 800px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+  .login-intro {
+    min-height: 350px;
+    padding: 94px 28px 26px;
+  }
+  .login-brand {
+    top: 25px;
+    left: 28px;
+    font-size: 20px;
+  }
+  .login-story {
+    margin-top: 20px;
+  }
+  .login-intro h1 {
+    font-size: clamp(30px, 6vw, 44px);
+    letter-spacing: -1.5px;
+  }
+  .login-story p {
+    font-size: 13px;
+    max-width: 290px;
+  }
+  .login-intro .polaris-orbit {
+    width: 260px;
+    top: 35px;
+    right: -40px;
+    left: auto;
+    transform: none;
+    opacity: 0.38;
+  }
+  .login-intro .login-note {
+    margin-top: 14px;
+    padding-top: 16px;
+    font-size: 10px;
+  }
+  .login-form-side {
+    min-height: auto;
+    padding: 28px 20px 32px;
+  }
+  .login-card {
+    max-width: 480px;
+    padding: 28px;
+    border-radius: 18px;
+  }
+  .login-card h2 {
+    font-size: 32px;
+  }
+  .login-footer {
+    max-width: 480px;
+    font-size: 9px;
+  }
+  .welcome-page {
+    padding: 24px;
+  }
+  .welcome-content {
+    grid-template-columns: 1fr 180px;
+    padding: 36px 28px 24px;
+  }
+  .welcome-content .polaris-orbit {
+    width: 190px;
+    right: 5px;
+  }
+  .welcome-content h1 {
+    font-size: 36px;
+  }
+  .welcome-content .welcome-timing {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+@media (max-width: 500px) {
+  .welcome-content {
+    grid-template-columns: 1fr;
+    padding-top: 165px;
+  }
+  .welcome-content .polaris-orbit {
+    width: 165px;
+    right: 50%;
+    top: 0;
+    transform: translateX(50%);
+  }
+  .welcome-content h1 {
+    font-size: 34px;
+    margin-top: 18px;
+  }
+  .welcome-content .login-eyebrow {
+    font-size: 8px;
+  }
+  .welcome-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .login-intro {
+    min-height: 325px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-content {
+    animation: none;
+  }
+  .orbit-track-one,
+  .polaris-star {
+    animation: none;
+  }
+  .welcome-progress span {
+    animation: none;
+    transform: none;
+  }
+}

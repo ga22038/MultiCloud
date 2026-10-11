@@ -6,7 +6,7 @@ Actualización del **11 de octubre de 2026**: [Polaris UES funciona en AWS y GCP
 
 | Requisito              | Evidencia comprobada                                                                                                   | Pendiente o limitación                                                                                     |
 | ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Aplicación funcional   | Ocho módulos, flujo completo de pedido facturado y movimiento único; acceso en ambas nubes.                            | Revisión final de los campos del negocio con el evaluador.                                                 |
+| Aplicación funcional   | Nueve módulos, incluyendo Auditoría, flujo completo de pedido facturado y movimiento único; acceso en ambas nubes.     | Revisión final de los campos del negocio con el evaluador.                                                 |
 | Frontend/backend/API   | Next.js, capas separadas, APIs autenticadas, sesiones HTTPS y usuario personal `ga22038`.                              | Usuarios adicionales según los operadores reales.                                                          |
 | Docker                 | Imágenes web/migración copiadas de Artifact Registry a ECR conservando digest; contenedores en ambas nubes.            | No hay despliegue automático de cada commit.                                                               |
 | NGINX                  | Proxy HTTPS por sitio, renovación TLS probada en ambos y reenvío restringido de desafíos ACME.                         | El ensayo multicloud mide conmutación DNS; no sustituye una prueba específica del laboratorio local NGINX. |
@@ -51,3 +51,11 @@ Actualización del **11 de octubre de 2026**: [Polaris UES funciona en AWS y GCP
 5. Preparar la entrega antes del vencimiento de la prueba GCP, mostrado como **23 de octubre de 2026**, y retirar recursos después de evaluar para evitar consumo olvidado.
 
 No presentar el proyecto como cumplimiento completo: el failover de aplicación está demostrado; Multi-AZ y recuperación completa de datos entre nubes siguen pendientes.
+
+## Revisión adicional de la guía y del equipo
+
+La sección 4A y la fase 3 solicitan un upstream NGINX con backend de respaldo. En los sitios desplegados NGINX sirve el backend local y Route 53 conmuta entre nubes. Falta configurar y ensayar el failover directo de backend en NGINX; la prueba DNS de 127.677 segundos no satisface por sí sola ese mecanismo específico.
+
+La sección 5 solicita además orquestación automatizada de promoción de MariaDB GCP y posterior resincronización hacia AWS. El runbook describe controles, pero no existe todavía esa automatización probada. La réplica mostró retraso de 0 segundos en muestras; falta comprobar el objetivo de menos de un segundo de forma sostenida bajo carga, indicado en la fase 2.
+
+[Usuarios y trazabilidad](usuarios-y-trazabilidad.md) documenta los cinco carnets adicionales con rol Administrador, inventario compartido, autoría en tablas y bienvenida personalizada de 6 segundos. Estos cambios funcionales no reemplazan los ensayos de infraestructura pendientes.

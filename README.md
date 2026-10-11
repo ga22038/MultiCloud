@@ -1,5 +1,7 @@
 # Polaris UES
 
+El equipo comparte inventario y pedidos, con autor y última modificación en las tablas y un módulo de Auditoría. El acceso incluye una bienvenida personalizada de 6 segundos. Ver [usuarios y trazabilidad](docs/usuarios-y-trazabilidad.md).
+
 Responsable del proyecto: **ga22038**. Repositorio: [MultiCloud](https://github.com/ga22038/MultiCloud).
 
 Publicado en AWS y Google Cloud: [abrir Polaris UES](https://app.multicloud.polarisenterprisesv.com). AWS atiende como primario y GCP como respaldo mediante Route 53. Ambas aplicaciones usan RDS privado; MariaDB GCP replica por GTID sobre cuatro túneles IPsec/BGP. Consultar [el despliegue AWS y sus límites](docs/despliegue-aws.md) y [el despliegue GCP](docs/despliegue-gcp.md). RDS permanece Single-AZ por las restricciones del plan gratuito; el requisito Multi-AZ todavía no se cumple.

@@ -80,7 +80,7 @@ export function applyCommand(
   actor: Actor,
   command: Command,
 ): State {
-  return domain.transact(state, (draft) => {
+  const result = domain.transact(state, (draft) => {
     switch (command.type) {
       case "createOrder":
         return domain.createOrder(draft, actor, ...command.args);
@@ -112,4 +112,31 @@ export function applyCommand(
         return domain.correctMovement(draft, actor, ...command.args);
     }
   });
+  // Link new history entries to stable record IDs, including removed catalog rows.
+  const kinds = [
+    "customers",
+    "materials",
+    "warehouses",
+    "stocks",
+    "orders",
+    "movements",
+  ] as const;
+  const entities: NonNullable<domain.Audit["entities"]> = [];
+  for (const kind of kinds) {
+    const before = new Map(
+      state[kind].map((row) => [row.id, JSON.stringify(row)]),
+    );
+    const after = new Map(
+      result[kind].map((row) => [row.id, JSON.stringify(row)]),
+    );
+    for (const id of new Set([...before.keys(), ...after.keys()]))
+      if (before.get(id) !== after.get(id)) entities.push({ kind, id });
+  }
+  const previous = new Set(state.audit.map((entry) => entry.id));
+  for (const entry of result.audit)
+    if (!previous.has(entry.id)) {
+      entry.commandType = command.type;
+      entry.entities = entities;
+    }
+  return result;
 }

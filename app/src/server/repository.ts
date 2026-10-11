@@ -67,6 +67,9 @@ export async function executeOperation(user: User, operation: Operation) {
     let next: State;
     try {
       next = applyCommand(state, user, operation.command);
+      const existing = new Set(state.audit.map((entry) => entry.id));
+      for (const entry of next.audit)
+        if (!existing.has(entry.id)) entry.operationId = operation.id;
     } catch (error) {
       if (error instanceof PermissionError)
         throw new ApiError(403, "FORBIDDEN", error.message);

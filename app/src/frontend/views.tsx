@@ -52,6 +52,7 @@ import { usePagination } from "./pagination";
 import { dateLabel } from "../dates";
 import { kardexCsv, inventoryPdf, ordersPdf, kardexPdf } from "./documents";
 import { exportBackup, useConnection } from "./store";
+import { AttributionCells, CreatorFilter, matchesCreator } from "./Attribution";
 
 export function Overview({
   state,
@@ -406,6 +407,12 @@ function OrderTable({
               <th className="numeric">Cantidad</th>
               <th>Estado</th>
               {!compact && <th>Creado</th>}
+              {!compact && (
+                <>
+                  <th>Creado por</th>
+                  <th>Última modificación por</th>
+                </>
+              )}
               <th>
                 <span className="sr-only">Acciones</span>
               </th>
@@ -458,6 +465,7 @@ function OrderTable({
                 {!compact && (
                   <td className="muted">{dateLabel(order.createdAt)}</td>
                 )}
+                {!compact && <AttributionCells record={order} />}
                 <td>
                   <button
                     className="icon-button row-open"
@@ -494,10 +502,12 @@ export function Orders({
 }) {
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("Todos");
+  const [creator, setCreator] = useState("");
   const definition = workflowDefinition[module];
   const source = workflowOrders(state, module);
   const rows = source.filter(
     (o) =>
+      matchesCreator(o, creator) &&
       (status === "Todos" || o.status === status) &&
       `${o.number} ${state.customers.find((c) => c.id === o.customerId)?.name} ${o.lines
         .map((l) => {
@@ -577,6 +587,11 @@ export function Orders({
             onChange={setQuery}
             placeholder="Buscar pedido, cliente o material…"
           />
+          <CreatorFilter
+            value={creator}
+            onChange={setCreator}
+            records={source}
+          />
           <span className="muted">{rows.length} pedidos</span>
         </div>
         <OrderTable
@@ -613,10 +628,12 @@ export function Inventory({
   const [query, setQuery] = useState("");
   const [warehouse, setWarehouse] = useState("");
   const [expiry, setExpiry] = useState("");
+  const [creator, setCreator] = useState("");
   const rows = newestFirst(
     state.stocks.filter((s) => {
       const material = state.materials.find((m) => m.id === s.materialId)!;
       return (
+        matchesCreator(s, creator) &&
         (!warehouse || s.warehouseId === warehouse) &&
         (!expiry ||
           (expiry === "expired"
@@ -631,7 +648,7 @@ export function Inventory({
   );
   const p = usePagination(
     rows.length,
-    [query, warehouse, expiry, state.revision].join("|"),
+    [query, warehouse, expiry, creator, state.revision].join("|"),
   );
   const total = rows.reduce((s, stock) => s + balance(state, stock.id), 0);
   const reserve = rows.reduce((s, stock) => s + reserved(state, stock.id), 0);
@@ -690,6 +707,11 @@ export function Inventory({
             onChange={setQuery}
             placeholder="Buscar código, material o lote…"
           />
+          <CreatorFilter
+            value={creator}
+            onChange={setCreator}
+            records={state.stocks}
+          />
           <select
             aria-label="Filtrar inventario por bodega"
             value={warehouse}
@@ -719,6 +741,8 @@ export function Inventory({
                 <th>Material</th>
                 <th>Lote / Bodega</th>
                 <th>Fecha de ingreso</th>
+                <th>Creado por</th>
+                <th>Última modificación por</th>
                 <th>Vencimiento</th>
                 <th className="numeric">Existencias kg</th>
                 <th className="numeric">Reservado kg</th>
@@ -752,6 +776,7 @@ export function Inventory({
                     <td className="date-cell">
                       {dateLabel(registrationDate(state, "stocks", stock.id))}
                     </td>
+                    <AttributionCells record={stock} />
                     <td>
                       <span
                         className={
@@ -1097,16 +1122,25 @@ export function Catalogs({
     "customers",
   );
   const [query, setQuery] = useState("");
-  const customers = state.customers.filter((c) =>
-    `${c.name} ${c.nit} ${c.city}`.toLowerCase().includes(query.toLowerCase()),
+  const [creator, setCreator] = useState("");
+  const customers = state.customers.filter(
+    (c) =>
+      matchesCreator(c, creator) &&
+      `${c.name} ${c.nit} ${c.city}`
+        .toLowerCase()
+        .includes(query.toLowerCase()),
   );
-  const materials = state.materials.filter((m) =>
-    `${m.name} ${m.code} ${m.category}`
-      .toLowerCase()
-      .includes(query.toLowerCase()),
+  const materials = state.materials.filter(
+    (m) =>
+      matchesCreator(m, creator) &&
+      `${m.name} ${m.code} ${m.category}`
+        .toLowerCase()
+        .includes(query.toLowerCase()),
   );
-  const warehouses = state.warehouses.filter((w) =>
-    `${w.name} ${w.city}`.toLowerCase().includes(query.toLowerCase()),
+  const warehouses = state.warehouses.filter(
+    (w) =>
+      matchesCreator(w, creator) &&
+      `${w.name} ${w.city}`.toLowerCase().includes(query.toLowerCase()),
   );
   const rows = newestFirst<{ id: string }>(
     tab === "customers"
@@ -1116,7 +1150,10 @@ export function Catalogs({
         : warehouses,
     (item) => registrationDate(state, tab, item.id),
   );
-  const p = usePagination(rows.length, [tab, query, state.revision].join("|"));
+  const p = usePagination(
+    rows.length,
+    [tab, query, creator, state.revision].join("|"),
+  );
   const visibleIds = new Set(rows.slice(p.start, p.end).map((item) => item.id));
   const actions = (id: string, name: string) =>
     isAdmin && (
@@ -1175,6 +1212,7 @@ export function Catalogs({
               onClick={() => {
                 setTab(t.key);
                 setQuery("");
+                setCreator("");
               }}
             >
               <t.icon size={16} />
@@ -1189,6 +1227,11 @@ export function Catalogs({
             onChange={setQuery}
             placeholder="Buscar en el catálogo…"
           />
+          <CreatorFilter
+            value={creator}
+            onChange={setCreator}
+            records={state[tab]}
+          />
         </div>
         <div className="table-scroll">
           {tab === "customers" && (
@@ -1199,6 +1242,8 @@ export function Catalogs({
                   <th>NIT</th>
                   <th>Ciudad</th>
                   <th>Fecha de registro</th>
+                  <th>Creado por</th>
+                  <th>Última modificación por</th>
                   {isAdmin && <th>Acciones</th>}
                 </tr>
               </thead>
@@ -1216,6 +1261,7 @@ export function Catalogs({
                       <td className="date-cell">
                         {dateLabel(registrationDate(state, tab, c.id))}
                       </td>
+                      <AttributionCells record={c} />
                       {actions(c.id, c.name)}
                     </tr>
                   ))}
@@ -1231,6 +1277,8 @@ export function Catalogs({
                   <th>Categoría</th>
                   <th>Unidad</th>
                   <th>Fecha de registro</th>
+                  <th>Creado por</th>
+                  <th>Última modificación por</th>
                   {isAdmin && <th>Acciones</th>}
                 </tr>
               </thead>
@@ -1249,6 +1297,7 @@ export function Catalogs({
                       <td className="date-cell">
                         {dateLabel(registrationDate(state, tab, m.id))}
                       </td>
+                      <AttributionCells record={m} />
                       {actions(m.id, m.name)}
                     </tr>
                   ))}
@@ -1263,6 +1312,8 @@ export function Catalogs({
                   <th>Ciudad</th>
                   <th className="numeric">Existencias kg</th>
                   <th>Fecha de registro</th>
+                  <th>Creado por</th>
+                  <th>Última modificación por</th>
                   {isAdmin && <th>Acciones</th>}
                 </tr>
               </thead>
@@ -1286,6 +1337,7 @@ export function Catalogs({
                       <td className="date-cell">
                         {dateLabel(registrationDate(state, tab, w.id))}
                       </td>
+                      <AttributionCells record={w} />
                       {actions(w.id, w.name)}
                     </tr>
                   ))}
@@ -1352,6 +1404,13 @@ export function SettingsView({ state }: { state: State; isAdmin: boolean }) {
         </section>
         <section className="panel settings-panel">
           <h2>Acceso por rol</h2>
+          <p>
+            Los usuarios comparten inventario, catálogos y pedidos. El filtro
+            por creador facilita revisar el trabajo de cada persona; no
+            restringe el acceso. Cada cambio guarda el usuario autenticado. Los
+            administradores tienen los mismos permisos sobre los registros del
+            equipo.
+          </p>
           <p>
             El servidor valida el rol de la sesión en cada operación. El
             administrador puede cambiar la vista de trabajo.

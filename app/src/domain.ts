@@ -4,10 +4,17 @@ export type Status =
 export type MovementType =
   "Entrada" | "Salida por pedido" | "Baja" | "Ajuste" | "Reversión";
 export type CatalogKind = "customers" | "materials" | "warehouses";
-interface Registered {
+export interface Registered {
   createdAt?: string;
+  createdBy?: string;
+  createdById?: string;
+  updatedAt?: string;
+  updatedBy?: string;
+  updatedById?: string;
 }
 export interface Actor {
+  id?: string;
+  username?: string;
   name: string;
   role: Role;
 }
@@ -45,7 +52,7 @@ export interface OrderLine {
   grams: number;
   allocations: Allocation[];
 }
-export interface Order {
+export interface Order extends Registered {
   id: string;
   number: string;
   customerId: string;
@@ -68,6 +75,7 @@ export interface Movement {
   document: string;
   reason: string;
   actor: string;
+  actorId?: string;
   at: string;
   orderId?: string;
   correctsId?: string;
@@ -81,6 +89,13 @@ export interface Movement {
   };
 }
 export interface Audit {
+  actorId?: string;
+  operationId?: string;
+  commandType?: string;
+  entities?: {
+    kind: CatalogKind | "stocks" | "orders" | "movements";
+    id: string;
+  }[];
   changes?: { before: unknown; after: unknown };
   id: string;
   action: string;
@@ -112,6 +127,19 @@ export interface Receipt {
 
 const uid = () => crypto.randomUUID();
 export const now = () => new Date().toISOString();
+export const actorLabel = (actor: Actor) => actor.username || actor.name;
+function registration(actor: Actor): Registered {
+  return {
+    createdAt: now(),
+    createdBy: actorLabel(actor),
+    createdById: actor.id,
+  };
+}
+function touch(record: Registered, actor: Actor) {
+  record.updatedAt = now();
+  record.updatedBy = actorLabel(actor);
+  record.updatedById = actor.id;
+}
 export function today() {
   return new Intl.DateTimeFormat("en-CA", {
     timeZone: "America/El_Salvador",
@@ -208,7 +236,8 @@ function log(
     action,
     detail,
     ...(changes ? { changes } : {}),
-    actor: actor.name,
+    actor: actorLabel(actor),
+    actorId: actor.id,
     role: actor.role,
     at: now(),
   });
@@ -230,7 +259,8 @@ function movement(
   state.movements.push({
     ...input,
     id: uid(),
-    actor: actor.name,
+    actor: actorLabel(actor),
+    actorId: actor.id,
     at: now(),
     balance: result,
     snapshot: {
@@ -243,6 +273,7 @@ function movement(
       expiry: stock.expiry,
     },
   });
+  touch(stock, actor);
 }
 function orderOf(state: State, id: string) {
   const order = state.orders.find((o) => o.id === id);
@@ -283,8 +314,9 @@ export function createOrder(
     customerId: input.customerId,
     lines,
     notes: input.notes.trim().slice(0, 2000),
+    ...registration(actor),
     createdAt: now(),
-    createdBy: actor.name,
+    createdBy: actorLabel(actor),
     status: "Nuevo",
   };
   state.orders.unshift(order);
@@ -336,6 +368,7 @@ export function allocateOrder(
     l.allocations = structuredClone(allocations[l.id]);
   });
   order.status = "Asignado";
+  touch(order, actor);
   log(state, actor, "Lotes y bodegas asignados", order.number);
 }
 
@@ -404,7 +437,8 @@ export function confirmOrder(
     }
   order.status = "Confirmado";
   order.confirmedAt = now();
-  order.confirmedBy = actor.name;
+  order.confirmedBy = actorLabel(actor);
+  touch(order, actor);
   log(state, actor, "Pedido confirmado · salida registrada", order.number);
 }
 
@@ -429,6 +463,7 @@ export function invoiceOrder(
     throw new Error("Ese número de factura ya está registrado.");
   order.invoice = invoice;
   order.status = "Facturado";
+  touch(order, actor);
   log(state, actor, "Factura registrada", `${order.number} · ${invoice}`);
 }
 
@@ -444,6 +479,7 @@ export function cancelOrder(
     throw new Error("Solo puedes cancelar pedidos sin salida de inventario.");
   const clean = text(reason, "Motivo de cancelación");
   order.status = "Cancelado";
+  touch(order, actor);
   log(
     state,
     actor,
@@ -491,7 +527,7 @@ export function receive(
   if (!stock) {
     stock = {
       id: uid(),
-      createdAt: now(),
+      ...registration(actor),
       materialId: input.materialId,
       warehouseId: input.warehouseId,
       expiry: input.expiry,
@@ -548,7 +584,7 @@ export function writeOff(
 export function addCustomer(
   state: State,
   actor: Actor,
-  input: Omit<Customer, "id" | "createdAt">,
+  input: Pick<Customer, "name" | "nit" | "city">,
 ) {
   allowed(actor, []);
   const nit = text(input.nit, "NIT");
@@ -556,7 +592,7 @@ export function addCustomer(
     throw new Error("Ya existe un cliente con ese NIT.");
   state.customers.push({
     id: uid(),
-    createdAt: now(),
+    ...registration(actor),
     name: text(input.name, "Nombre"),
     city: text(input.city, "Ciudad"),
     nit,
@@ -566,7 +602,7 @@ export function addCustomer(
 export function addMaterial(
   state: State,
   actor: Actor,
-  input: Omit<Material, "id" | "createdAt">,
+  input: Pick<Material, "name" | "code" | "category">,
 ) {
   allowed(actor, []);
   const code = text(input.code, "Código").toUpperCase();
@@ -574,7 +610,7 @@ export function addMaterial(
     throw new Error("El código de material ya existe.");
   state.materials.push({
     id: uid(),
-    createdAt: now(),
+    ...registration(actor),
     code,
     name: text(input.name, "Nombre"),
     category: text(input.category, "Categoría"),
@@ -584,7 +620,7 @@ export function addMaterial(
 export function addWarehouse(
   state: State,
   actor: Actor,
-  input: Omit<Warehouse, "id" | "createdAt">,
+  input: Pick<Warehouse, "name" | "city">,
 ) {
   allowed(actor, []);
   const name = text(input.name, "Nombre");
@@ -592,7 +628,7 @@ export function addWarehouse(
     throw new Error("La bodega ya existe.");
   state.warehouses.push({
     id: uid(),
-    createdAt: now(),
+    ...registration(actor),
     name,
     city: text(input.city, "Ciudad"),
   });
@@ -685,6 +721,7 @@ export function updateCatalog(
       throw new Error("La bodega ya existe.");
     Object.assign(item, { name, city: second });
   }
+  touch(item, actor);
   log(state, actor, "Catálogo editado", name, {
     before,
     after: structuredClone(item),
@@ -802,6 +839,7 @@ export function updateStock(
   stock.lot = lot;
   stock.warehouseId = input.warehouseId;
   stock.expiry = input.expiry;
+  touch(stock, actor);
   if (delta)
     movement(state, actor, {
       operationKey,

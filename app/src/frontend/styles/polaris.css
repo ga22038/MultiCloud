@@ -474,3 +474,11 @@ table tbody td {
     padding-bottom: 25px;
   }
 }
+.audit-change {
+  max-width: 540px;
+  max-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}

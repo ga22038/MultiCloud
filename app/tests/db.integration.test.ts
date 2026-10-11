@@ -74,8 +74,17 @@ describe.skipIf(process.env.RUN_DB_TESTS !== "true")(
       const first = await executeOperation(user, request);
       const replay = await executeOperation(user, request);
       expect(first.replayed).toBe(false);
+      expect(first.state.audit[0]).toMatchObject({
+        actorId: user.id,
+        operationId: request.id,
+        commandType: "addWarehouse",
+      });
+      expect(first.state.warehouses.at(-1)).toMatchObject({
+        createdById: user.id,
+      });
       expect(replay.replayed).toBe(true);
       expect(replay.state.revision).toBe(first.state.revision);
+      expect(replay.state.audit).toEqual(first.state.audit);
       expect(
         replay.state.warehouses.filter((row) => row.name === "TEST idempotent"),
       ).toHaveLength(1);

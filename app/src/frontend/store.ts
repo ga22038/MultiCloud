@@ -9,6 +9,7 @@ type Connection = {
   role: Role;
   error: string;
   site: string;
+  welcome: boolean;
 };
 let connection: Connection = {
   status: "loading",
@@ -18,6 +19,7 @@ let connection: Connection = {
   role: "Customer",
   error: "",
   site: "",
+  welcome: false,
 };
 let state: State = {
   version: 1,
@@ -110,7 +112,12 @@ export async function refreshData() {
         audit: [],
       };
       loadError = undefined;
-      connection = { ...connection, status: "unauthenticated", error: "" };
+      connection = {
+        ...connection,
+        status: "unauthenticated",
+        error: "",
+        welcome: false,
+      };
     } else {
       loadError =
         error instanceof Error
@@ -127,7 +134,15 @@ export async function signIn(username: string, password: string) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
   });
+  connection = { ...connection, welcome: true };
   await refreshData();
+}
+export function dismissWelcome() {
+  connection = { ...connection, welcome: false };
+  emit();
+  requestAnimationFrame(() =>
+    document.getElementById("main")?.focus({ preventScroll: true }),
+  );
 }
 export async function signOut() {
   try {

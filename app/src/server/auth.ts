@@ -5,7 +5,7 @@ import { database } from "./database";
 import { sessionSecret } from "./config";
 import { signSession, verifySession } from "./crypto";
 import { ApiError } from "./errors";
-export type User = { id: string; name: string; role: Role };
+export type User = { id: string; username?: string; name: string; role: Role };
 const cookieName = "polaris_session";
 export async function requireUser(): Promise<User> {
   const token = (await cookies()).get(cookieName)?.value;
@@ -13,7 +13,7 @@ export async function requireUser(): Promise<User> {
   if (!id)
     throw new ApiError(401, "UNAUTHENTICATED", "Inicia sesión para continuar.");
   const rows = await database().query(
-    "SELECT id, name, role FROM app_users WHERE id = ? AND active = 1",
+    "SELECT id, username, name, role FROM app_users WHERE id = ? AND active = 1",
     [id],
   );
   if (!rows[0])
