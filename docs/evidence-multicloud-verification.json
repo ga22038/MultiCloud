@@ -1,0 +1,46 @@
+{
+  "verifiedOn": "2026-10-11",
+  "application": {
+    "sites": ["aws", "gcp"],
+    "https": true,
+    "secureAuthenticatedSession": true,
+    "revision": 5,
+    "stateSha256": "cc38329ac2581f7504f70ef3d97ccc5ea2cc22e348cf502b7aeb530b6acd748b",
+    "operations": 5,
+    "users": 2,
+    "sameDataOnBothSites": true,
+    "originalWorkflowPreserved": true
+  },
+  "replica": {
+    "readOnly": true,
+    "ioRunning": "Yes",
+    "sqlRunning": "Yes",
+    "lastIoErrno": 0,
+    "lastSqlErrno": 0,
+    "observedSecondsBehindMaster": 0,
+    "usingGtid": "Slave_Pos",
+    "observedGtidIoPos": "0-1624920364-60",
+    "tls": true,
+    "verifyServerCertificate": true
+  },
+  "backup": {
+    "createdAt": "2026-10-11T22:34:17Z",
+    "privateObject": "mariadb/20261011T223417Z-94687daa.sql.gz",
+    "bytes": 6543,
+    "crc32c": "50iCDg==",
+    "localCopyRetainedOutsideGit": true,
+    "isolatedRestore": true,
+    "restoredRevisionHashOperationsUsersMatch": true
+  },
+  "terraform": {
+    "awsOnlyPlan": "No changes",
+    "vpnOnlyPlan": "No changes",
+    "gcpOnlyPlan": "No changes"
+  },
+  "limitations": [
+    "RDS is Single-AZ to preserve the FREE account plan.",
+    "Database promotion after complete AWS/RDS loss has not been tested.",
+    "Database failback from a promoted GCP database has not been tested.",
+    "Observed replication lag is a point-in-time sample, not a performance guarantee."
+  ]
+}

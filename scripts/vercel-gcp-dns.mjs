@@ -2,12 +2,15 @@ const token = process.env.VERCEL_TOKEN;
 if (!token) throw new Error("Falta VERCEL_TOKEN en el archivo privado.");
 const domain = "polarisenterprisesv.com";
 const address = process.argv[2];
+const site = process.argv[3] ?? "gcp";
+if (!["gcp", "aws"].includes(site))
+  throw new Error("Sitio inválido: usa gcp o aws.");
 if (
   !address ||
   !/^\d{1,3}(\.\d{1,3}){3}$/.test(address) ||
   address.startsWith("127.")
 )
-  throw new Error("Proporciona la IP pública de la máquina GCP del proyecto.");
+  throw new Error("Proporciona la IP pública de la máquina del proyecto.");
 async function api(path, teamId, body) {
   const url = new URL(path, "https://api.vercel.com");
   if (teamId) url.searchParams.set("teamId", teamId);
@@ -44,7 +47,8 @@ try {
     throw new Error(
       "La zona multicloud ya está delegada; revisar el proveedor autoritativo.",
     );
-  const names = ["gcp.multicloud", "app.multicloud"];
+  const names =
+    site === "aws" ? ["aws.multicloud"] : ["gcp.multicloud", "app.multicloud"];
   for (const name of names) {
     if (
       records.some(
@@ -69,7 +73,7 @@ try {
         type: "A",
         value: address,
         ttl: 60,
-        comment: "Polaris UES GCP academic deployment",
+        comment: `Polaris UES ${site.toUpperCase()} academic deployment`,
       });
     }
     console.log(`${name}.${domain} -> ${address}`);

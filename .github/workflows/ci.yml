@@ -41,3 +41,7 @@ jobs:
       - run: terraform -chdir=infra/terraform validate
       - run: terraform -chdir=infra/terraform/gcp-only init -backend=false -input=false
       - run: terraform -chdir=infra/terraform/gcp-only validate
+      - run: terraform -chdir=infra/terraform/aws-only init -backend=false -input=false
+      - run: terraform -chdir=infra/terraform/aws-only validate
+      - run: terraform -chdir=infra/terraform/vpn-only init -backend=false -input=false
+      - run: terraform -chdir=infra/terraform/vpn-only validate

@@ -11,7 +11,24 @@ server {
   listen 80;
   server_name ${PUBLIC_DOMAIN};
   server_tokens off;
-  location /.well-known/acme-challenge/ { root /var/www/acme; }
+  location /.well-known/acme-challenge/ {
+    root /var/www/acme;
+    try_files $uri @acme_peer;
+  }
+  # A challenge can be issued by either cloud while DNS selects the other site.
+  # The peer path never forwards again, avoiding recursive proxy requests.
+  location /_polaris-acme/ {
+    allow ${ACME_PEER_IP};
+    deny all;
+    alias /var/www/acme/.well-known/acme-challenge/;
+  }
+  location @acme_peer {
+    rewrite ^/\.well-known/acme-challenge/(.+)$ /_polaris-acme/$1 break;
+    proxy_pass http://${ACME_PEER_IP};
+    proxy_set_header Host $host;
+    proxy_connect_timeout 3s;
+    proxy_read_timeout 5s;
+  }
   location / { return 301 https://$host$request_uri; }
 }
 server {

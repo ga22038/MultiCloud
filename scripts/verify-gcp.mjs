@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 process.loadEnvFile(".secrets/gcp/runtime.env");
-const origin = "https://app.multicloud.polarisenterprisesv.com";
-for (const host of [origin, "https://gcp.multicloud.polarisenterprisesv.com"]) {
+const origin = "https://gcp.multicloud.polarisenterprisesv.com";
+for (const host of [origin]) {
   const response = await fetch(`${host}/api/health/ready`);
   assert.equal(response.status, 200);
   assert.deepEqual(await response.json(), { status: "ready", site: "gcp" });

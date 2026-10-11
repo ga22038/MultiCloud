@@ -11,6 +11,8 @@ No automatizar la promoción por una sola comprobación HTTP. DNS cambia el dest
 
 No promover MariaDB GCP en este escenario.
 
+Ensayo real del 11 de octubre de 2026: AWS aplicación detenida, RDS y VPN activos; primera respuesta por GCP a los **127.677 segundos** desde la solicitud del corte. La sesión continuó válida. El pedido ficticio `UES-AWS-FAILOVER-001` se creó por GCP, su UUID se repitió sin duplicados y permaneció visible al volver a AWS. La revisión avanzó de 4 a 5. Véase [registro medido](evidence-app-failover.json) y [despliegue AWS](despliegue-aws.md). Esta prueba demuestra conmutación de aplicación y retorno de tráfico; no demuestra promoción ni failback de bases de datos.
+
 ## Pérdida total de AWS o RDS
 
 1. Detener cambios y registrar la hora de detección. Mantener ambos sitios con escrituras deshabilitadas durante la decisión.

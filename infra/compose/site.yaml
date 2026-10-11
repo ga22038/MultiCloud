@@ -41,7 +41,8 @@ services:
     ports: ["80:80", "443:443"]
     environment:
       PUBLIC_DOMAIN: ${PUBLIC_DOMAIN}
-      NGINX_ENVSUBST_FILTER: PUBLIC_DOMAIN
+      ACME_PEER_IP: ${ACME_PEER_IP:-127.0.0.1}
+      NGINX_ENVSUBST_FILTER: PUBLIC_DOMAIN|ACME_PEER_IP
     volumes:
       - ../nginx/site.conf.template:/etc/nginx/templates/default.conf.template:ro
       - ${TLS_CERT_DIR:?Provide fullchain.pem and privkey.pem}:/etc/nginx/tls:ro

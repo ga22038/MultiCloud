@@ -2,7 +2,7 @@
 
 Responsable del proyecto: **ga22038**. Repositorio: [MultiCloud](https://github.com/ga22038/MultiCloud).
 
-Publicado en Google Cloud: [abrir Polaris UES](https://app.multicloud.polarisenterprisesv.com). Consultar [recursos, acceso y evidencias del despliegue GCP](docs/despliegue-gcp.md). AWS y la redundancia entre nubes siguen pendientes.
+Publicado en AWS y Google Cloud: [abrir Polaris UES](https://app.multicloud.polarisenterprisesv.com). AWS atiende como primario y GCP como respaldo mediante Route 53. Ambas aplicaciones usan RDS privado; MariaDB GCP replica por GTID sobre cuatro túneles IPsec/BGP. Consultar [el despliegue AWS y sus límites](docs/despliegue-aws.md) y [el despliegue GCP](docs/despliegue-gcp.md). RDS permanece Single-AZ por las restricciones del plan gratuito; el requisito Multi-AZ todavía no se cumple.
 
 Aplicación de inventario, pedidos, despacho y referencias de factura. Adaptación de Univar a Next.js, TypeScript y MariaDB para el proyecto académico multicloud AWS/GCP. El proyecto original permanece intacto.
 

@@ -2,6 +2,8 @@
 
 Desplegado y comprobado el 11 de octubre de 2026. Responsable: **ga22038**.
 
+**Estado después de integrar AWS:** ambas aplicaciones consultan el mismo RDS privado en Ohio por VPN. La base GCP es una réplica GTID de solo lectura, con hilos IO/SQL activos y TLS validado. Route 53 selecciona AWS como primario del dominio común. Las características iniciales descritas abajo se conservan como historial; los cambios finales y las evidencias están en [despliegue AWS](despliegue-aws.md).
+
 ## Acceso y cuenta
 
 - Aplicación: https://app.multicloud.polarisenterprisesv.com
@@ -32,7 +34,7 @@ La captura proporcionada por el propietario mostraba USD268.45 de crédito y ven
 
 Terraform administra **25 recursos** en `infra/terraform/gcp-only`. El bucket de estado se creó previamente como requisito del backend. Las VM tienen protección contra borrado; el disco de datos y el bucket de respaldos tienen `prevent_destroy`. El servidor anterior `polaris-server` pertenece a otra instalación y no se modificó.
 
-Los dos registros A se crearon en el DNS de Vercel, con TTL de 60 segundos, apuntando a la IP reservada. Todavía no existe delegación de `multicloud` a Route 53 ni conmutación DNS entre proveedores.
+Inicialmente se crearon dos registros A en Vercel. Después se trasladaron los registros del proyecto a Route 53 y se delegó solamente `multicloud`; los nameservers del dominio principal permanecen en Vercel. El dominio común ahora utiliza conmutación de aplicación entre AWS y GCP.
 
 ## Seguridad y versiones
 
@@ -51,7 +53,7 @@ migrate@sha256:e4700c21e3631848b9cd841bf554f3b14296290d5c4e5653ea64d43f074196a5
 
 Las imágenes están fijadas por digest. El certificado HTTPS de Let's Encrypt cubre ambos nombres y vence el 9 de enero de 2027. El timer `polaris-ues-renew-tls.timer` revisa la renovación dos veces al día, copia el certificado renovado y recarga NGINX después de validar su configuración.
 
-**Limitación pendiente:** dos simulaciones de renovación (`--dry-run`) fallaron durante la validación DNS secundaria de Let's Encrypt staging, con error de red al consultar A/AAAA. Los dos hostnames resuelven a la IP correcta y la ruta HTTP de desafío respondió correctamente desde la VM y desde un cliente externo. El certificado de producción ya fue emitido y es válido, pero la renovación automática completa no se considera comprobada hasta obtener una simulación correcta. Revisar DNS y repetir el dry-run antes del vencimiento; no modificar los nameservers del dominio principal para intentar resolver este fallo.
+Las primeras simulaciones de renovación fallaron en consultas DNS secundarias. Después de integrar Route 53 y el intercambio de desafíos ACME entre los dos NGINX, **la simulación completa pasó en GCP y AWS**. Cada sitio conserva su propia clave privada. La ruta entre pares sirve únicamente desafíos ACME y no vuelve a reenviar solicitudes, evitando bucles.
 
 ## Respaldo y recuperación comprobados
 
@@ -65,7 +67,7 @@ Ese segundo objeto también se restauró y comparó correctamente con la base ac
 
 `scripts/verify-gcp-restore.sh` repite esta comparación. El contenedor temporal se elimina al terminar. Un respaldo de la base no sustituye la conservación segura de credenciales, CA, certificados y configuración.
 
-## Evidencias funcionales
+## Evidencias funcionales del despliegue inicial
 
 - Ambos hostnames responden `200` en readiness con sitio `gcp` y TLS válido.
 - HTTP redirige a HTTPS; sesión con cookie `Secure` y `HttpOnly`.
@@ -77,17 +79,17 @@ Ese segundo objeto también se restauró y comparó correctamente con la base ac
 - Cloud Monitoring registró comprobaciones correctas desde Virginia, Oregon, Iowa, Bélgica, Singapur y São Paulo.
 - Captura: `docs/polaris-ues-gcp-flujo.png`.
 
-Repetir la comprobación HTTP, sin cambiar datos de negocio:
+La comprobación actual consulta directamente el hostname GCP, porque el dominio común ahora selecciona AWS. Valida también que el flujo original sigue conservado, sin cambiar datos de negocio:
 
 ```powershell
-rtk node scripts/verify-gcp.mjs --workflow
+rtk proxy node scripts/verify-gcp.mjs --workflow
 ```
 
 ## Operación
 
 ```powershell
-rtk powershell -NoProfile -File scripts/terraform-gcp.ps1 validate
-rtk powershell -NoProfile -File scripts/terraform-gcp.ps1 plan
+rtk proxy pwsh -NoProfile -File scripts/terraform-gcp.ps1 validate
+rtk proxy pwsh -NoProfile -File scripts/terraform-gcp.ps1 plan
 rtk gcloud compute ssh polaris-ues-gcp-app --zone=us-central1-a --project=project-dba46330-c40e-432b-9ad --tunnel-through-iap
 ```
 
@@ -99,10 +101,10 @@ Los scripts `prepare-gcp-app.sh`, `migrate-gcp-app.sh`, `grant-gcp-runtime.sh` y
 
 ## Pendiente para completar multicloud
 
-**GCP es actualmente el único sitio publicado y MariaDB GCP es el escritor temporal.** No existe todavía una réplica GTID desde AWS. Tampoco se ha probado redundancia entre nubes.
+AWS, VPN, RDS y la réplica GTID ya están desplegados. La transferencia conservó revisión 4, cuatro operaciones y dos usuarios. El directorio original `/var/lib/polaris-ues/mysql` permanece conservado; la réplica se inicializó en `/var/lib/polaris-ues/mysql-replica` a partir de un respaldo de RDS, con `sql_log_bin=0` durante la restauración y posición GTID explícita. No se reiniciaron los binlogs originales para ocultar diferencias.
 
-Faltan AWS/EC2/RDS, conectividad VPN, restauración inicial y réplica GTID, conmutación DNS, aislamiento del escritor, pruebas de RTO/RPO y retorno conservando datos. El monitoreo actual cubre disponibilidad HTTP y métricas básicas de Compute Engine; faltan alertas operativas, métricas de replicación, recolección central de logs de contenedores y carga medida.
+Permanecen pendientes Multi-AZ, ensayo de pérdida total de AWS con promoción de datos y retorno, alertas de retraso y recolección central de logs. La prueba de corte de aplicación se registra por separado y no equivale a una promoción de base de datos.
 
-No aplicar directamente el root multicloud `infra/terraform` sobre esta instalación: administra componentes GCP similares con otro estado. Antes de incorporar AWS, separar el root AWS o importar y refactorizar recursos para evitar recrear la infraestructura y solapar redes.
+No aplicar directamente el root de referencia `infra/terraform` sobre esta instalación. Los roots activos son `gcp-only`, `aws-only` y `vpn-only`, con estados separados. El generador inicial de secretos GCP ahora rechaza sobrescribir una configuración que ya apunta a RDS.
 
 Referencias de implementación: [Cloud Storage: inserción de objetos](https://docs.cloud.google.com/storage/docs/json_api/v1/objects/insert), [renovación de Certbot](https://eff-certbot.readthedocs.io/en/stable/using.html#renewing-certificates), [comprobaciones de disponibilidad con Terraform](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/monitoring_uptime_check_config).

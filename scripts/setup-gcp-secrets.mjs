@@ -1,6 +1,13 @@
 import fs from "node:fs";
 import { randomBytes } from "node:crypto";
 const root = ".secrets/gcp";
+if (fs.existsSync(`${root}/app/site.env`)) {
+  const current = fs.readFileSync(`${root}/app/site.env`, "utf8");
+  if (!/^MARIADB_HOST=10\.20\.1\.3\r?$/m.test(current))
+    throw new Error(
+      "La aplicación GCP ya utiliza otro escritor. Conservar su configuración actual; no regenerar el despliegue inicial.",
+    );
+}
 fs.mkdirSync(`${root}/db/tls`, { recursive: true });
 fs.mkdirSync(`${root}/app/database-ca`, { recursive: true });
 const path = `${root}/runtime.env`;

@@ -1,22 +1,34 @@
-# Plan de evidencias del proyecto académico
+# Evidencias del proyecto académico
 
 La guía entregada define componentes y pruebas, pero no proporciona una rúbrica numérica. Esta lista convierte esos requisitos en evidencias; no inventa ponderaciones.
 
-Actualización del 11 de octubre de 2026: [Polaris UES está desplegado en GCP](despliegue-gcp.md), con HTTPS, contenedores, MariaDB privada, respaldo restaurado y prueba funcional completa. AWS y los ensayos entre nubes continúan pendientes.
+Actualización del **11 de octubre de 2026**: [Polaris UES funciona en AWS y GCP](despliegue-aws.md). AWS atiende como primario y GCP como respaldo de aplicación; ambas API utilizan el mismo escritor RDS privado. MariaDB GCP mantiene una réplica GTID de solo lectura. El plan AWS continúa FREE, sin actualización a pago.
 
-| Requisito            | Entrega preparada                                                           | Evidencia real pendiente                                    |
-| -------------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| Aplicación funcional | Ocho módulos y flujo completo de pedido comprobado en GCP.                  | Repetir en AWS y durante cortes entre nubes.                |
-| Frontend/backend/API | Next.js, capas separadas, HTTPS y sesión real en GCP.                       | Cuentas individuales adicionales para operadores.           |
-| Docker               | Imágenes construidas en Cloud Build y contenedores activos en GCP.          | Desplegar los contenedores del sitio AWS.                   |
-| NGINX                | Redundancia local de aplicación y configuración TLS por sitio.              | Corte real del primario y evidencia del respaldo.           |
-| Terraform            | Root GCP aplicado: 25 recursos y estado remoto; plan posterior sin cambios. | Integrar AWS sin duplicar el estado GCP existente.          |
-| Conectividad         | Cuatro túneles IPSec/BGP definidos.                                         | Estado de túneles, rutas y consultas privadas entre nubes.  |
-| MariaDB              | Base privada GCP con TLS, disco persistente y respaldo restaurado.          | Configurar réplica GTID desde AWS y comprobar retraso real. |
-| Failover             | Readiness, bloqueo de escrituras y runbook de aislamiento/promoción.        | Medición de RTO/RPO y conciliación de operaciones.          |
-| Failback             | Procedimiento que conserva escrituras de GCP.                               | Ensayo de retorno a AWS sin divergencias.                   |
-| Carga y monitoreo    | k6 preparado, auditoría y comprobación HTTPS de Cloud Monitoring.           | Carga medida, logs centrales y alertas operativas y de lag. |
-| Documentación        | Arquitectura, API, despliegue y recuperación.                               | Capturas y registro de cada ensayo con versión y fecha.     |
+| Requisito              | Evidencia comprobada                                                                                                   | Pendiente o limitación                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Aplicación funcional   | Ocho módulos, flujo completo de pedido facturado y movimiento único; acceso en ambas nubes.                            | Revisión final de los campos del negocio con el evaluador.                                                 |
+| Frontend/backend/API   | Next.js, capas separadas, APIs autenticadas, sesiones HTTPS y usuario personal `ga22038`.                              | Usuarios adicionales según los operadores reales.                                                          |
+| Docker                 | Imágenes web/migración copiadas de Artifact Registry a ECR conservando digest; contenedores en ambas nubes.            | No hay despliegue automático de cada commit.                                                               |
+| NGINX                  | Proxy HTTPS por sitio, renovación TLS probada en ambos y reenvío restringido de desafíos ACME.                         | El ensayo multicloud mide conmutación DNS; no sustituye una prueba específica del laboratorio local NGINX. |
+| Terraform              | Estados separados: 25 recursos GCP, 38 AWS y 23 VPN; backend remoto cifrado y con bloqueo.                             | No aplicar el root superior encima de estos estados.                                                       |
+| Conectividad           | Cuatro túneles IPsec/IKEv2 y BGP activos; consultas desde GCP al RDS privado.                                          | Monitoreo y prueba de caída individual de túneles.                                                         |
+| MariaDB                | RDS 11.4.13 privado con TLS; réplica GCP con IO/SQL activos, errores 0 y retraso observado de 0 segundos.              | **RDS Multi-AZ no cumplido:** Free Tier admite Single-AZ. No se cambió de plan.                            |
+| Respaldos              | Copias privadas, respaldo previo al traslado y restauración aislada comprobada.                                        | Repetir periódicamente la restauración y conservar copias fuera de la prueba GCP.                          |
+| Failover de aplicación | AWS detenido con RDS activo: GCP respondió en **127.677 s**, conservó sesión y aceptó una escritura sin duplicar UUID. | La medida incluye Systems Manager y DNS; no es una garantía de tiempo máximo.                              |
+| Recuperación de base   | Aislamiento, promoción y conciliación descritos en el runbook.                                                         | **No ensayado:** pérdida completa de AWS/RDS, promoción GCP y RTO/RPO de datos.                            |
+| Retorno                | El pedido escrito por GCP permaneció al retornar tráfico a AWS, con RDS como único escritor.                           | **No ensayado:** failback desde una base GCP promovida hacia AWS.                                          |
+| Carga y monitoreo      | Health checks Route 53/GCP y alarmas CloudWatch EC2/espacio RDS; k6 preparado.                                         | Carga medida, logs centrales, alertas de lag y destinatarios de alertas.                                   |
+| Documentación          | Arquitectura, API, despliegues, recuperación, registro JSON y captura del ensayo.                                      | Añadir evidencias de los ensayos pendientes.                                                               |
+
+## Evidencias para entregar
+
+- [Despliegue AWS y configuración multicloud](despliegue-aws.md).
+- [Despliegue GCP y comprobaciones previas](despliegue-gcp.md).
+- [Registro del corte de aplicación y retorno](evidence-app-failover.json).
+- [Verificación de réplica, restauración y planes Terraform](evidence-multicloud-verification.json).
+- [Captura del pedido conservado](polaris-ues-aws-failover.png).
+- [Arquitectura](arquitectura.md) y [procedimiento de recuperación](recuperacion.md).
+- Scripts reproducibles y Terraform versionado. Secretos, estados completos y SQL permanecen fuera de Git.
 
 ## Demostración funcional sugerida
 
@@ -27,16 +39,15 @@ Actualización del 11 de octubre de 2026: [Polaris UES está desplegado en GCP](
 5. Exportar pedido, alistamiento, resumen de factura e inventario/PDF y Kardex/CSV.
 6. Intentar una acción con rol insuficiente y una escritura con revisión antigua.
 7. Simular respuesta incierta y demostrar recuperación del comprobante sin duplicados.
-8. Ejecutar cortes separados de aplicación y nube completa, midiendo recuperación y pérdida real.
-9. Crear una operación mientras GCP es primario y demostrar que queda conservada tras volver a AWS.
+8. Presentar el registro del corte AWS: sesión conservada, escritura por GCP y lectura posterior por AWS.
+9. Ensayar por separado el corte total de nube y la promoción de datos; esa prueba continúa pendiente.
 
 ## Próximos pasos en orden
 
-1. Revisar interfaz y flujos con el usuario; ajustar campos del negocio y objetivos de evaluación.
-2. Completar el ensayo local de redundancia NGINX cuando Docker Desktop esté disponible. Los contenedores de GCP ya están activos.
-3. Verificar acceso, créditos y cuotas AWS; considerar el vencimiento de la prueba GCP el 23 de octubre de 2026.
-4. Integrar y aplicar Terraform AWS; desplegar TLS y permisos mínimos conservando el estado GCP existente.
-5. Configurar y comprobar réplica GTID real antes de habilitar failover de datos.
-6. Completar monitoreo, carga, cortes, promoción, retorno y documentación de evidencias.
+1. Resolver con el evaluador el requisito Multi-AZ frente a la restricción de conservar el plan gratuito. No activar pago sin autorización explícita.
+2. Ensayar pérdida total de AWS/RDS con aislamiento del escritor, promoción GCP y conciliación de transacciones inciertas.
+3. Ensayar failback de datos conservando las escrituras de la base GCP promovida.
+4. Medir carga y uso de recursos; completar logs y alertas de réplica.
+5. Preparar la entrega antes del vencimiento de la prueba GCP, mostrado como **23 de octubre de 2026**, y retirar recursos después de evaluar para evitar consumo olvidado.
 
-El proyecto no se considera completamente evaluable en multicloud por tener archivos Terraform válidos. Requiere recursos desplegados y ensayos reproducibles.
+No presentar el proyecto como cumplimiento completo: el failover de aplicación está demostrado; Multi-AZ y recuperación completa de datos entre nubes siguen pendientes.

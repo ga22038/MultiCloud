@@ -72,8 +72,8 @@ flowchart TB
   G -. tras aislamiento y promoción .-> M
 ```
 
-RDS Multi-AZ cubre fallos internos de AWS. La réplica GCP cubre pérdida de AWS mediante promoción controlada. No se mantiene escritura simultánea en ambas nubes.
+El diagrama muestra el objetivo de la guía. **La instalación actual conserva RDS Single-AZ por el plan gratuito**, por lo que todavía no cubre el requisito Multi-AZ. La réplica GCP permite preparar recuperación ante pérdida de AWS mediante promoción controlada. No se mantiene escritura simultánea en ambas bases.
 
 **Corrección de la guía:** Cloud SQL ofrece MySQL, PostgreSQL y SQL Server; la réplica MariaDB se ejecutará en Compute Engine. La replicación GTID asíncrona permite retraso y pérdida de las últimas transacciones ante una caída total; no garantiza RPO cero. Referencias: [motores de Cloud SQL](https://docs.cloud.google.com/sql/docs/features), [GTID en MariaDB](https://mariadb.com/docs/server/ha-and-performance/standard-replication/gtid).
 
-La aplicación funciona con MariaDB local. Los manifiestos y Terraform definen el despliegue objetivo. El laboratorio Docker depende de restablecer su motor. La infraestructura de las cuentas, replicación real, certificados, DNS y mediciones de recuperación todavía no se han desplegado ni probado.
+AWS y GCP ya ejecutan la misma imagen, con HTTPS, RDS privado, cuatro túneles IPsec/BGP, réplica GTID de solo lectura y Route 53. Los recursos reales y los ensayos se documentan en [despliegue AWS](despliegue-aws.md). El corte de aplicación comparte el escritor RDS; un fallo total requiere aislamiento y promoción manual, con un ensayo de datos todavía pendiente.

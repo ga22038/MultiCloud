@@ -13,3 +13,9 @@ Consultar C:\Users\danie\.codex\RTK.md y prefijar los comandos de terminal con r
 - Enviar cada credencial solamente al proveedor al que pertenece y dentro de una accion autorizada por el usuario. No incluir secretos en URLs o argumentos visibles.
 - La disponibilidad de una credencial no autoriza despliegues, compras, cambios de permisos, publicaciones ni modificaciones externas adicionales.
 - Antes de crear commits, comprobar que los archivos de credenciales continuan excluidos de Git.
+
+## Planes de nube
+
+- Conservar el plan gratuito o de prueba vigente en AWS y Google Cloud. No activar un plan de pago ni actualizar la facturacion.
+- Antes de aprovisionar recursos, verificar creditos, vencimiento y servicios disponibles dentro del plan actual. Tener credito no significa que todos los servicios sean gratuitos.
+- Si un requisito necesita actualizar a pago, detener ese cambio y explicar la limitacion al usuario.
