@@ -19,6 +19,6 @@ La compilación y las comprobaciones HTTP se ejecutan con `npm run build` y `npm
 
 Docker Desktop no respondió; el laboratorio se ejecutó con MariaDB portátil y Next.js. No se comprobó el cambio entre contenedores en ejecución.
 
-Después de esta verificación local se creó la instalación GCP con DNS y HTTPS, descrita en [el informe de despliegue](despliegue-gcp.md). AWS, VPN, replicación GTID, promoción, retorno y mediciones de carga/RTO/RPO siguen pendientes. La comprobación local no demuestra recuperación entre nubes.
+Después de esta verificación local se desplegaron AWS y GCP, VPN, réplica GTID, HTTPS y DNS de failover. El [informe multicloud](despliegue-aws.md) documenta el corte real de aplicación y su retorno. Promoción y failback de datos ante pérdida total de AWS, Multi-AZ y carga continúan pendientes. La comprobación local por sí sola no demuestra recuperación entre nubes.
 
 Las credenciales permanecen en `.secrets/`, fuera de Git. La aplicación original permanece intacta.

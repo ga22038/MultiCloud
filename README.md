@@ -70,7 +70,7 @@ app/src/reports.ts      Generación de PDF reutilizable y comprobable
 app/tests/              Reglas, contratos, autenticación, reportes e integración SQL
 infra/nginx/            Proxy local y plantilla HTTPS por nube
 infra/compose/          Manifiestos de aplicación y réplica
-infra/terraform/        Redes, máquinas, RDS Multi-AZ, VPN y DNS opcionales
+infra/terraform/        Estados activos aws-only, gcp-only y vpn-only; diseño de referencia
 infra/load/             Prueba de lectura con k6
 docs/                   Arquitectura, API y recuperación
 scripts/                Preparación, ejecución y verificación local
@@ -119,4 +119,4 @@ Para AWS, usar un perfil CLI y no credenciales del usuario raíz. Para GCP, usar
 - [Verificación local y alcance pendiente](docs/verificacion-local.md)
 - [Ejemplos PDF con datos ficticios](docs/examples/)
 
-El root `infra/terraform/gcp-only` se aplicó en Google Cloud y el DNS de Vercel apunta al sitio con HTTPS. El root multicloud sigue como diseño pendiente de integración con ese estado. Replicación GTID, VPN, failover y retorno a AWS requieren ejecución y evidencias.
+Los roots `aws-only`, `gcp-only` y `vpn-only` están aplicados, con estados separados y planes finales sin cambios. Vercel delega solamente `multicloud` a Route 53. La replicación GTID, el corte de aplicación hacia GCP y el retorno del tráfico a AWS están comprobados. Permanecen pendientes Multi-AZ, promoción y failback de datos ante pérdida completa de AWS, carga y alertas de réplica. Consultar [las evidencias y limitaciones](docs/evaluacion.md).

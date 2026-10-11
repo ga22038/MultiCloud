@@ -1,6 +1,6 @@
 # Dominio y repositorio del laboratorio
 
-Actualizado el 11 de octubre de 2026. Se crearon dos registros DNS para Polaris UES.
+Actualizado el 11 de octubre de 2026. Polaris UES utiliza una subzona Route 53 delegada desde Vercel.
 
 ## GitHub
 
@@ -12,9 +12,9 @@ Es público. Se verificó autenticación como `ga22038` con permiso de escritura
 
 El token permitió consultar `polarisenterprisesv.com`. Sus servidores DNS son `ns1.vercel-dns.com` y `ns2.vercel-dns.com`.
 
-Se crearon registros A `gcp.multicloud` y `app.multicloud` con TTL 60, apuntando a `34.122.222.237`. Ambos sirven Polaris UES con HTTPS. No se modificaron los registros de las otras aplicaciones ni se delegó la zona a Route 53.
+Inicialmente se crearon registros A para el sitio GCP. Durante la integración AWS se verificaron sus equivalentes en Route 53, se respaldaron los registros anteriores y se sustituyeron únicamente los tres A del proyecto por los cuatro NS de `multicloud`. El dominio principal y los registros de otras aplicaciones permanecen en Vercel.
 
-Diseño final previsto para incorporar AWS:
+Configuración activa:
 
 | Nombre                                   | Función                                                                   |
 | ---------------------------------------- | ------------------------------------------------------------------------- |
@@ -23,6 +23,6 @@ Diseño final previsto para incorporar AWS:
 | `aws.multicloud.polarisenterprisesv.com` | Sitio primario y comprobación de disponibilidad.                          |
 | `gcp.multicloud.polarisenterprisesv.com` | Sitio de respaldo y comprobación de disponibilidad.                       |
 
-Para configurar los NS en Vercel primero se necesitan los nameservers reales de la zona Route 53. Para los registros de los sitios se necesitan las IP de las máquinas del proyecto. No usar IP de otras aplicaciones ni `127.0.0.1` como destino público.
+La zona Route 53 es `Z03571242N6ORBZWWJ1VW`. Sus nameservers son `ns-1519.awsdns-61.org`, `ns-1928.awsdns-49.co.uk`, `ns-474.awsdns-59.com` y `ns-996.awsdns-60.net`. AWS usa `18.227.139.179`; GCP usa `34.122.222.237`. El dominio común tiene registros PRIMARY/SECONDARY, TTL 60 y comprobación HTTPS de readiness. El [ensayo de conmutación](evidence-app-failover.json) conservó sesión y escritura. No ejecutar el generador inicial de registros A sobre la zona ya delegada.
 
 El token que se había colocado en `.env.example` se trasladó a `.secrets/credentials.env`, y la plantilla quedó vacía. Como apareció en una salida de inspección, debe revocarse y sustituirse. El reemplazo debe guardarse solamente en el archivo privado.
