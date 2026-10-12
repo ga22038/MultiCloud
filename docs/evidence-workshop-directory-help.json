@@ -1,0 +1,25 @@
+{
+  "verifiedAt": "2026-10-12T01:05:05.895Z",
+  "sourceRevision": "61fdf87c888e",
+  "cloudBuildId": "995fb89f-819f-4049-b4d9-9704e99c634e",
+  "imageDigest": "sha256:eb36b7cbf12fd0faab2fcd4bcd0df600669a04c624eb34472dba28501333a5c7",
+  "ciUrl": "https://github.com/ga22038/MultiCloud/actions/runs/38190126151",
+  "cloudBuildStatus": "SUCCESS",
+  "ciStatus": "SUCCESS",
+  "sites": [
+    {
+      "site": "aws",
+      "pageStatus": 200,
+      "healthStatus": 200,
+      "newInstructionsInPublishedBundle": true
+    },
+    {
+      "site": "gcp",
+      "pageStatus": 200,
+      "healthStatus": 200,
+      "newInstructionsInPublishedBundle": true
+    }
+  ],
+  "hardcodedStudentFolderRequired": false,
+  "existingCommandsPreserved": true
+}
