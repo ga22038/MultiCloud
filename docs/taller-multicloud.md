@@ -113,7 +113,7 @@ powershell -NoProfile -File scripts/run-gcp-script.ps1 -Instance polaris-ues-gcp
 
 El helper AWS envía un script público por SSM; el helper GCP lo ejecuta mediante SSH por IAP. El script consulta contenedores, prueba sintaxis NGINX y muestra el upstream activo. No lee claves privadas ni imprime archivos de entorno. Abrir su código antes de usarlo para entender cada instrucción.
 
-Esperado: servicio `app` running/healthy y `nginx` running. La imagen tiene distinto nombre de registro, pero el mismo digest `sha256:40ec82548b0fdd788997ae44f4d05397a0443020a45ae1c947e62741f7222b7d` en ambos servidores. `nginx -t` valida sintaxis; no demuestra por sí mismo failover. El upstream actual tiene `server app:3000`, sin backend remoto `backup`.
+Esperado: servicio `app` running/healthy y `nginx` running. La imagen tiene distinto nombre de registro, pero debe tener el mismo digest SHA256 en ambos servidores; contrastar con el [registro de publicación del taller](evidence-learning-release.json). `nginx -t` valida sintaxis; no demuestra por sí mismo failover. El upstream actual tiene `server app:3000`, sin backend remoto `backup`.
 
 ## 5. Demostrar privacidad, transacciones, VPN y réplica
 
@@ -253,6 +253,7 @@ Para cerrar la guía: ensayar NGINX con backend remoto backup; medir carga/lag; 
 - [Arquitectura del repositorio](arquitectura.md), [despliegue AWS](despliegue-aws.md), [recuperación](recuperacion.md) y [evaluación](evaluacion.md).
 - [Ensayo histórico de aplicación](evidence-app-failover.json), [verificación de réplica/restauración](evidence-multicloud-verification.json), [usuarios y revisión 9](evidence-team-release.json), [publicación actual](evidence-design-release.json).
 - [CI de la versión desplegada](https://github.com/ga22038/MultiCloud/actions/runs/38187019731).
+- [Publicación del taller y corrección de sesión](evidence-learning-release.json), con [CI de esta actualización](https://github.com/ga22038/MultiCloud/actions/runs/38188876402).
 - [AWS: restricciones RDS Free Tier](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html#Welcome.FreeTier).
 - [Google: motores Cloud SQL](https://docs.cloud.google.com/sql/docs).
 - [NGINX: upstream y backup](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server).

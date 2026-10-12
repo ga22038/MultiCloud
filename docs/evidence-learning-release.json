@@ -1,0 +1,57 @@
+{
+  "verifiedAt": "2026-10-12T00:45:10.205Z",
+  "sourceRevision": "b742e07debb8",
+  "cloudBuildId": "0f56c73b-c8f6-45b5-b2b7-f76b92648ca5",
+  "imageDigest": "sha256:73b1edea0acd839c225249f47c50b597de891ae2a2ef99fc4aed5ff5eaf8afce",
+  "ciUrl": "https://github.com/ga22038/MultiCloud/actions/runs/38188876402",
+  "sites": [
+    {
+      "site": "aws",
+      "pageStatus": 200,
+      "observer": "aws",
+      "allPublicEndpointsReady": true,
+      "unauthenticatedApiStatus": 401,
+      "dataPreserved": true,
+      "revision": 9,
+      "stateSha256": "bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1"
+    },
+    {
+      "site": "gcp",
+      "pageStatus": 200,
+      "observer": "gcp",
+      "allPublicEndpointsReady": true,
+      "unauthenticatedApiStatus": 401,
+      "dataPreserved": true,
+      "revision": 9,
+      "stateSha256": "bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1"
+    }
+  ],
+  "liveOutagePerformed": false,
+  "learning": {
+    "public": true,
+    "lessons": 10,
+    "scenariosAreSimulations": true,
+    "healthQueriesAreReadOnly": true,
+    "fixedTargetsOnly": true,
+    "noCloudCredentialsInBrowser": true,
+    "progressStoredLocally": true,
+    "jsonExportVerified": true
+  },
+  "sessionGuard": {
+    "pendingRequestTested": true,
+    "initialFailureTested": true,
+    "rejectedSessionClearsIdentityAndData": true,
+    "unauthenticatedReloadBrowserVerified": true,
+    "publicInitialLoadingShowedSessionGate": true,
+    "publicInitialLoadingWorkspaceRendered": false,
+    "publicLoginWorkspaceRendered": false,
+    "loginLearningLinkVerified": true
+  },
+  "cloudBuildStatus": "SUCCESS",
+  "ciStatus": "SUCCESS",
+  "localTestsPassed": 65,
+  "publicPage": "https://app.multicloud.polarisenterprisesv.com/aprender",
+  "publicBrowserHealthProbeVerified": true,
+  "jsonExportContentVerified": true,
+  "mobileNoHorizontalOverflow": true
+}
