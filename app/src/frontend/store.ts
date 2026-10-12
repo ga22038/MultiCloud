@@ -5,6 +5,7 @@ type Connection = {
   status: "loading" | "ready" | "error" | "unauthenticated";
   id: string;
   name: string;
+  username?: string;
   email: string;
   role: Role;
   error: string;

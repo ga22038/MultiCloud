@@ -8,7 +8,7 @@ El diseño toma como referencia la composición de acceso de [b.well, presentada
 - «Recordar mi usuario» guarda solamente el usuario en este navegador, después de un acceso correcto. Desmarcarlo elimina el dato guardado. No guarda contraseñas ni prolonga la sesión.
 - La ayuda explica cómo entrar y a quién solicitar recuperación. No promete un sistema de recuperación automática todavía inexistente.
 - En móvil se conserva el formulario y se elimina la imagen. El fondo PNG se solicita mediante CSS únicamente desde 801 píxeles.
-- La bienvenida personalizada conserva sus 6 segundos y el botón «Entrar ahora».
+- La bienvenida dice «Bienvenido» y el usuario de acceso, sin mostrar el rol. Dura 6 segundos y permite «Entrar ahora».
 - El acceso sigue siendo web. No se muestran botones de App Store o Google Play porque no existen aplicaciones publicadas en esas tiendas.
 
 ## Imagen original
@@ -25,4 +25,20 @@ Prompt final utilizado:
 
 Se comprobó el formulario en 1366 × 900 y 390 × 844 píxeles, sin desbordamiento horizontal. En móvil la imagen está oculta y su `background-image` es `none`. Se verificaron mostrar/ocultar, ayuda desplegable, ingreso de JM21008, retorno al formulario con usuario recordado y contraseña vacía.
 
-Capturas: [escritorio](polaris-ues-login-earth-desktop.png) y [móvil](polaris-ues-login-earth-mobile.png).
+La versión actual ocupa toda la pantalla. Una curva SVG amplia y continua separa la imagen del formulario; la imagen usa una mezcla de luminosidad sobre azul grafito para armonizar con la paleta Polaris. Se comprobó en 1366 × 768 y 390 × 844 píxeles, sin desbordamiento horizontal.
+
+Capturas actuales: [escritorio](polaris-ues-login-fullscreen.png) y [móvil](polaris-ues-login-fullscreen-mobile.png). Las capturas `login-earth` anteriores documentan la versión con tarjeta.
+
+## Bienvenida animada
+
+La composición fuente está en `motion/welcome/index.tsx`. Remotion genera un MP4 H.264 de 1920 × 1080, 30 FPS y 180 fotogramas: 6 segundos. La cámara avanza suavemente sobre la Tierra y una estrella guía deja una estela breve. El cierre aclara la escena para pasar al espacio de trabajo.
+
+La aplicación reproduce el archivo mediante video nativo, silencioso y en línea. Remotion es una dependencia de desarrollo; no requiere un servicio adicional en la nube. El saludo personalizado permanece en HTML accesible y no se graba en el video. Usa el usuario de la sesión, con el nombre como alternativa. El texto complementario dice «Un mismo norte. Un equipo conectado» y no expone el rol.
+
+Se verificó reproducción automática silenciosa, duración de 6 segundos, saludo `jm21008`, ausencia del rol, entrada automática con foco en el contenido y botón para omitir. La vista móvil mide 390 × 844 píxeles sin desbordamiento. Capturas: [bienvenida](polaris-ues-welcome-film.png) y [móvil](polaris-ues-welcome-film-mobile.png).
+
+Con movimiento reducido se muestra el póster estático. Si el video falla, el póster conserva la bienvenida. El botón para omitirla está siempre disponible; los temporizadores se cancelan al salir. La bienvenida aparece después de un acceso correcto, no al recargar el ERP.
+
+Renderizar con `npm run motion:render`; se puede añadir `-- --browser-executable="ruta/al/navegador"` para usar Chrome instalado. Comprobar la composición con `npx tsc -p tsconfig.json`.
+
+Esta actualización utiliza los servidores existentes en AWS y GCP. No necesita ampliar la infraestructura ni actualizar los planes de facturación.

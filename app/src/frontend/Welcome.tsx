@@ -1,18 +1,28 @@
-import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ShieldCheck } from "lucide-react";
-import { PolarisMark } from "./PolarisMark";
-import type { Role } from "../domain";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { ArrowRight, Sparkle } from "lucide-react";
+
+const motionQuery = "(prefers-reduced-motion: reduce)";
+function subscribeMotion(onChange: () => void) {
+  const query = window.matchMedia(motionQuery);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+const prefersReducedMotion = () => window.matchMedia(motionQuery).matches;
 
 export function Welcome({
   name,
-  role,
   onComplete,
 }: {
   name: string;
-  role: Role;
   onComplete: () => void;
 }) {
   const [seconds, setSeconds] = useState(6);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const reducedMotion = useSyncExternalStore(
+    subscribeMotion,
+    prefersReducedMotion,
+    () => true,
+  );
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     heading.current?.focus();
@@ -31,40 +41,44 @@ export function Welcome({
     };
   }, [onComplete]);
   return (
-    <main className="welcome-page" aria-labelledby="welcome-heading">
-      <div className="welcome-brand">
-        <span className="polaris-monogram">P</span> Polaris <span>UES</span>
-      </div>
-      <section className="welcome-content">
-        <PolarisMark compact />
-        <span className="login-eyebrow">TU EQUIPO. UN MISMO NORTE.</span>
+    <main className="arrival-page" aria-labelledby="welcome-heading">
+      <div className="arrival-poster" aria-hidden="true" />
+      {!reducedMotion && !videoFailed && (
+        <video
+          className="arrival-film"
+          src="/videos/polaris-welcome-v1.mp4"
+          poster="/images/polaris-welcome-poster.png"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+          tabIndex={-1}
+          onError={() => setVideoFailed(true)}
+        />
+      )}
+      <header className="arrival-header">
+        <div className="arrival-brand">
+          <Sparkle size={27} strokeWidth={1.35} aria-hidden="true" />
+          Polaris <span>UES</span>
+        </div>
+        <button className="arrival-skip" onClick={onComplete}>
+          Entrar ahora <ArrowRight size={17} aria-hidden="true" />
+        </button>
+      </header>
+      <section className="arrival-content">
+        <span className="arrival-kicker">TU EQUIPO. UN MISMO NORTE.</span>
         <h1 id="welcome-heading" ref={heading} tabIndex={-1}>
           Bienvenido, <span>{name}.</span>
         </h1>
-        <p>
-          Tu equipo conectado.
-          <br />
-          Cada operación, bajo control.
-        </p>
-        <div className="welcome-identity">
-          <ShieldCheck size={16} />
-          <span>{role}</span>
-          <span className="welcome-divider" />
-          Polaris UES
-        </div>
-        <button className="button primary welcome-enter" onClick={onComplete}>
-          Entrar ahora <ArrowRight size={17} />
-        </button>
-        <div className="welcome-timing">
-          <span>Entrarás automáticamente en {seconds} s</span>
-          <div className="welcome-progress" aria-hidden="true">
-            <span />
-          </div>
-        </div>
+        <p>Tu espacio está listo. Sigamos conectados.</p>
+        <span className="arrival-message">
+          Un mismo norte. Un equipo conectado.
+        </span>
       </section>
-      <footer className="welcome-footer">
-        Inventario · Pedidos · Trazabilidad
-        <span>UNIVERSIDAD DE EL SALVADOR</span>
+      <footer className="arrival-footer">
+        <span>INVENTARIO · PEDIDOS · TRAZABILIDAD</span>
+        <span>Entrarás automáticamente en {seconds} s</span>
       </footer>
     </main>
   );

@@ -23,6 +23,7 @@
     "test:api": "node scripts/smoke-api.mjs",
     "docs:api": "node --import tsx scripts/export-openapi.ts",
     "docs:pdf": "node --import tsx scripts/export-examples.ts",
+    "motion:render": "remotion render motion/welcome/index.tsx PolarisWelcome app/public/videos/polaris-welcome-v1.mp4 --config=motion/welcome/remotion.config.ts",
     "db:setup": "node --env-file=.secrets/runtime.env --import tsx app/scripts/setup-db.ts",
     "db:local": "node --env-file=.secrets/runtime.env --import tsx scripts/local-db.ts start",
     "db:install": "node scripts/install-local-db.mjs",
@@ -30,5 +31,10 @@
     "local:up": "docker compose --env-file .secrets/runtime.env up --build -d --wait",
     "local:status": "docker compose --env-file .secrets/runtime.env ps",
     "local:down": "docker compose --env-file .secrets/runtime.env down"
+  },
+  "devDependencies": {
+    "@remotion/cli": "4.0.534",
+    "remotion": "4.0.534",
+    "zod": "4.5.4"
   }
 }

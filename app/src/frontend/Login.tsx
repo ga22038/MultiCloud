@@ -41,6 +41,15 @@ export function Login() {
     <main className="access-page">
       <div className="access-shell">
         <section className="access-visual" aria-label="Nuestro norte, Polaris">
+          <svg
+            className="access-curve"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M62 0 C90 20 72 35 40 51 C6 70 10 85 48 100 H100 V0 Z" />
+          </svg>
           <span className="access-visual-label">
             UNIVERSIDAD DE EL SALVADOR
           </span>
@@ -189,10 +198,6 @@ export function Login() {
           </div>
         </section>
       </div>
-      <footer className="access-footer">
-        <span>Polaris UES · Gestión de operaciones</span>
-        <span>Universidad de El Salvador</span>
-      </footer>
     </main>
   );
 }

@@ -227,8 +227,7 @@ export default function App() {
   if (connection.welcome && connection.status === "ready")
     return (
       <Welcome
-        name={connection.name}
-        role={connection.role}
+        name={connection.username || connection.name}
         onComplete={dismissWelcome}
       />
     );

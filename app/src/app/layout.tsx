@@ -4,6 +4,7 @@ import "../frontend/styles/styles.css";
 import "../frontend/styles/polaris.css";
 import "../frontend/styles/access.css";
 import "../frontend/styles/login.css";
+import "../frontend/styles/cinema.css";
 export const metadata: Metadata = {
   title: "Polaris UES",
   description: "Gestión de inventario, pedidos y operaciones multicloud.",
