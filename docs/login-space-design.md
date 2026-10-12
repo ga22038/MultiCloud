@@ -42,3 +42,9 @@ Con movimiento reducido se muestra el póster estático. Si el video falla, el p
 Renderizar con `npm run motion:render`; se puede añadir `-- --browser-executable="ruta/al/navegador"` para usar Chrome instalado. Comprobar la composición con `npx tsc -p tsconfig.json`.
 
 Esta actualización utiliza los servidores existentes en AWS y GCP. No necesita ampliar la infraestructura ni actualizar los planes de facturación.
+
+## Publicación verificada
+
+El 11 de octubre de 2026 se publicó la versión `256ea17fcceb` en AWS y GCP, con la misma imagen `sha256:40ec82548b0fdd788997ae44f4d05397a0443020a45ae1c947e62741f7222b7d`. [GitHub Actions](https://github.com/ga22038/MultiCloud/actions/runs/38187019731) y Cloud Build `0f5391db-d826-4248-946a-ce650b10f3b9` terminaron correctamente.
+
+Ambas aplicaciones están saludables por HTTPS. Se comprobaron inicio de sesión, coincidencia del MP4 y póster con los archivos locales, solicitudes parciales del video y conservación del estado de datos en revisión 9. El dominio principal reprodujo el video y mostró «Bienvenido, jm21008» sin rol. [Registro de publicación](evidence-design-release.json), [login publicado](polaris-ues-login-published.png) y [bienvenida publicada](polaris-ues-welcome-published.png).

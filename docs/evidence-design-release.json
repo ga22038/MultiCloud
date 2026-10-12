@@ -1,0 +1,56 @@
+{
+  "verifiedAt": "2026-10-12T00:15:47.898Z",
+  "sourceRevision": "256ea17fcceb",
+  "cloudBuildId": "0f5391db-d826-4248-946a-ce650b10f3b9",
+  "webImageDigest": "sha256:40ec82548b0fdd788997ae44f4d05397a0443020a45ae1c947e62741f7222b7d",
+  "sites": [
+    {
+      "site": "aws",
+      "https": true,
+      "secureSession": true,
+      "stateSha256": "bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1",
+      "revision": 9,
+      "username": "ga22038",
+      "statePreserved": true,
+      "videoSha256": "cff6aed9daa37380a39296f2d4fb24dbe51ea3f157bf365c6a1467c12aa82972",
+      "videoBytes": 1584405,
+      "rangeRequests": true,
+      "posterMatches": true
+    },
+    {
+      "site": "gcp",
+      "https": true,
+      "secureSession": true,
+      "stateSha256": "bddfae43d9727673bc6628400ce399c35e0991c5bd69f10043fd3577a9f077d1",
+      "revision": 9,
+      "username": "ga22038",
+      "statePreserved": true,
+      "videoSha256": "cff6aed9daa37380a39296f2d4fb24dbe51ea3f157bf365c6a1467c12aa82972",
+      "videoBytes": 1584405,
+      "rangeRequests": true,
+      "posterMatches": true
+    }
+  ],
+  "welcome": {
+    "seconds": 6,
+    "personalized": true,
+    "roleShown": false,
+    "skipVerified": true,
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "noOverflow": true
+    },
+    "reducedMotionFallbackImplemented": true
+  },
+  "cloudBuildStatus": "SUCCESS",
+  "ciStatus": "SUCCESS",
+  "ciUrl": "https://github.com/ga22038/MultiCloud/actions/runs/38187019731",
+  "identicalImageAcrossClouds": true,
+  "commonDomain": "https://app.multicloud.polarisenterprisesv.com/",
+  "commonDomainWelcomeVerified": true,
+  "commonDomainVideoPlaybackVerified": true,
+  "commonDomainVideoDuration": 6,
+  "awsAccountPlan": "FREE",
+  "billingUpgradePerformed": false
+}
