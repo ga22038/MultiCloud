@@ -33,7 +33,13 @@ type Probe = {
   }[];
 };
 type Scenario = "normal" | "app" | "region";
-function Code({ text }: { text: string }) {
+function Code({
+  text,
+  label = "Copiar comandos",
+}: {
+  text: string;
+  label?: string;
+}) {
   const [notice, setNotice] = useState("");
   async function copy() {
     try {
@@ -49,7 +55,7 @@ function Code({ text }: { text: string }) {
         <span>
           <Terminal size={13} /> PowerShell
         </span>
-        <button onClick={() => void copy()} aria-label="Copiar comandos">
+        <button onClick={() => void copy()} aria-label={label}>
           <Copy size={14} />
           {notice || "Copiar"}
         </button>
@@ -458,6 +464,71 @@ export default function LearningLab() {
               </span>
               <h3 id="lesson-title">{active.title}</h3>
               <p>{active.goal}</p>
+              {(active.command.includes("scripts/") ||
+                active.command.includes("scripts\\") ||
+                active.command.includes("infra/") ||
+                active.id === "deploy") && (
+                <details className={styles.terminalHelp} open>
+                  <summary>
+                    Primero: abre PowerShell en tu carpeta del repositorio
+                  </summary>
+                  <ol>
+                    <li>
+                      En el Explorador de Windows, abre la carpeta donde
+                      clonaste MultiCloud. Debe contener package.json y la
+                      carpeta scripts. Cada compañero puede tener una ruta
+                      diferente.
+                    </li>
+                    <li>
+                      En la barra de dirección del Explorador escribe powershell
+                      y presiona Enter. No uses una terminal ubicada en
+                      C:\Windows\System32.
+                    </li>
+                    <li>
+                      Ejecuta la comprobación de abajo. Ambos Test-Path deben
+                      devolver True. Si aparece False, estás en otra carpeta o
+                      debes actualizar tu copia del repositorio.
+                    </li>
+                  </ol>
+                  <Code
+                    text={
+                      "Get-Location\nTest-Path .\\package.json\nTest-Path .\\scripts\\run-aws-script.ps1"
+                    }
+                    label="Copiar comprobación de carpeta"
+                  />
+                  <p>
+                    Después copia la línea completa del comando, desde
+                    powershell. -NoProfile por sí solo no es un programa. El
+                    prefijo .\ significa «dentro de la carpeta actual».
+                  </p>
+                  <dl>
+                    <div>
+                      <dt>powershell</dt>
+                      <dd>Ejecuta PowerShell.</dd>
+                    </div>
+                    <div>
+                      <dt>-NoProfile</dt>
+                      <dd>Omite las personalizaciones de PowerShell.</dd>
+                    </div>
+                    <div>
+                      <dt>-File</dt>
+                      <dd>Selecciona el script local que se ejecutará.</dd>
+                    </div>
+                    <div>
+                      <dt>-ScriptPath</dt>
+                      <dd>
+                        Indica el script que el helper enviará al servidor.
+                      </dd>
+                    </div>
+                  </dl>
+                  <p>
+                    Para el laboratorio compartido necesitas una sesión cloud
+                    autorizada. Tu carnet del ERP no concede permisos AWS/GCP.
+                    En una copia propia adapta cuenta, proyecto e instancia
+                    antes de ejecutar los helpers.
+                  </p>
+                </details>
+              )}
               {active.risk && (
                 <div className={styles.caution}>
                   <strong>Antes de ejecutarlo</strong>

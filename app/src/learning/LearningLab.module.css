@@ -427,6 +427,41 @@
 .lesson > p {
   font-size: 13px;
 }
+.terminalHelp {
+  border: 1px solid #d1dee8;
+  border-radius: 8px;
+  background: #f4f8fb;
+  padding: 18px 20px;
+  margin: 22px 0;
+}
+.terminalHelp summary {
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.terminalHelp p {
+  font-size: 12px;
+  margin-top: 14px;
+}
+.terminalHelp dl {
+  margin: 18px 0;
+  font-size: 11px;
+}
+.terminalHelp dl > div {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  border-top: 1px solid #dce4eb;
+  padding: 9px 0;
+}
+.terminalHelp dt {
+  font-family: monospace;
+  color: #29465e;
+}
+.terminalHelp dd {
+  margin: 0;
+  color: #657a8c;
+}
 .lesson ol {
   padding-left: 22px;
   display: grid;

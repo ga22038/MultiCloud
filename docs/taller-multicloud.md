@@ -59,6 +59,16 @@ Una imagen contiene código y dependencias; un contenedor es esa imagen ejecutá
 
 Cada compañero puede clonar el código y consultar las API de salud públicas sin conocer credenciales cloud. Para consultar las consolas necesita permisos IAM propios, por ejemplo lectura. Para detener servicios necesita permisos adicionales acordados con el propietario. No compartir sesiones de consola, contraseñas administrativas ni el directorio `.secrets`.
 
+Antes de ejecutar un comando con `scripts/` o `infra/`, abrir en el Explorador la carpeta del clon propio: debe contener `package.json` y `scripts`. Escribir `powershell` en la barra de dirección y presionar Enter. Cada compañero tiene su propia ruta; no se requiere usar la carpeta del propietario. No ejecutar estas rutas relativas desde `C:\Windows\System32`.
+
+```powershell
+Get-Location
+Test-Path .\package.json
+Test-Path .\scripts\run-aws-script.ps1
+```
+
+Ambos `Test-Path` deben devolver `True`. Si devuelven `False`, corregir la carpeta o actualizar el clon antes de continuar. Copiar la línea completa, incluido `powershell`: `-NoProfile` es un parámetro y no funciona como comando independiente. `-File` indica el script local; `-ScriptPath` indica el script que el helper enviará al servidor. `./` o `.\` significa «desde la carpeta actual».
+
 En Windows, instalar Git y PowerShell. Para trabajar con código: Node.js 24 LTS y Docker Desktop con motor Linux. Para cloud: AWS CLI v2, Google Cloud CLI y Terraform. Los comandos siguientes se escriben en PowerShell, desde la raíz del repositorio. RTK es opcional para los compañeros; si se usa, anteponer `rtk proxy` al programa.
 
 ```powershell

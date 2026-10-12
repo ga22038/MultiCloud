@@ -78,12 +78,13 @@ export const lessons: Lesson[] = [
     title: "Ver Docker y NGINX dentro del servidor",
     goal: "Comprobar el código que realmente se está ejecutando.",
     steps: [
+      "Abre PowerShell desde la carpeta de tu clon y comprueba que Test-Path .\\scripts\\run-aws-script.ps1 devuelve True. No uses C:\\Windows\\System32.",
       "Lee scripts/inspect-cloud-runtime.sh. Consulta contenedores y configuración pública; no imprime secretos.",
       "El helper AWS ejecuta el script por Systems Manager. El de GCP usa SSH por IAP.",
       "Compara el digest de la imagen app en ambos servidores; el nombre del registro puede ser distinto.",
     ],
     command:
-      "powershell -NoProfile -File scripts/run-aws-script.ps1 -ScriptPath scripts/inspect-cloud-runtime.sh\npowershell -NoProfile -File scripts/run-gcp-script.ps1 -Instance polaris-ues-gcp-app -ScriptPath scripts/inspect-cloud-runtime.sh",
+      "powershell -NoProfile -File .\\scripts\\run-aws-script.ps1 -ScriptPath .\\scripts\\inspect-cloud-runtime.sh\npowershell -NoProfile -File .\\scripts\\run-gcp-script.ps1 -Instance polaris-ues-gcp-app -ScriptPath .\\scripts\\inspect-cloud-runtime.sh",
     expected:
       "app running/healthy, nginx running y el mismo sha256 en ambas nubes. nginx -t correcto.",
     limit:
