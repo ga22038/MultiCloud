@@ -1,6 +1,7 @@
 import type { Command } from "../commands";
 import { Login } from "./Login";
 import { Welcome } from "./Welcome";
+import { SessionGate } from "./SessionGate";
 import { useEffect, useRef, useState } from "react";
 import {
   LayoutDashboard,
@@ -224,6 +225,13 @@ export default function App() {
       ? state.orders.find((o) => o.id === dialog.id)
       : undefined;
   if (connection.status === "unauthenticated") return <Login />;
+  if (!connection.id)
+    return (
+      <SessionGate
+        error={connection.status === "error" ? connection.error : undefined}
+        onRetry={() => void refreshData()}
+      />
+    );
   if (connection.welcome && connection.status === "ready")
     return (
       <Welcome

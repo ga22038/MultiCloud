@@ -52,6 +52,10 @@ Actualización del **11 de octubre de 2026**: [Polaris UES funciona en AWS y GCP
 
 No presentar el proyecto como cumplimiento completo: el failover de aplicación está demostrado; Multi-AZ y recuperación completa de datos entre nubes siguen pendientes.
 
+## Taller del equipo
+
+La [página de aprendizaje](https://app.multicloud.polarisenterprisesv.com/aprender) separa simulación educativa, consulta HTTP real y ensayos manuales. El [taller de defensa y reproducción](taller-multicloud.md) vincula cada requisito de la guía con su evidencia y limitación, incluye pasos de consola, comandos interpretados y la lista de referencias que deben adaptar los compañeros en cuentas propias.
+
 ## Revisión adicional de la guía y del equipo
 
 La sección 4A y la fase 3 solicitan un upstream NGINX con backend de respaldo. En los sitios desplegados NGINX sirve el backend local y Route 53 conmuta entre nubes. Falta configurar y ensayar el failover directo de backend en NGINX; la prueba DNS de 127.677 segundos no satisface por sí sola ese mecanismo específico.

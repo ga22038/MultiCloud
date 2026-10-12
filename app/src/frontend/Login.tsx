@@ -195,6 +195,10 @@ export function Login() {
               <br />
               Cada operación conserva el registro de su responsable.
             </p>
+            <a className="access-learning-link" href="/aprender">
+              Aprender y comprobar la arquitectura multicloud
+              <ArrowRight size={14} aria-hidden="true" />
+            </a>
           </div>
         </section>
       </div>

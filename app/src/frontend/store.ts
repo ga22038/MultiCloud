@@ -115,6 +115,12 @@ export async function refreshData() {
       loadError = undefined;
       connection = {
         ...connection,
+        id: "",
+        name: "",
+        username: undefined,
+        email: "",
+        role: "Customer",
+        site: "",
         status: "unauthenticated",
         error: "",
         welcome: false,
