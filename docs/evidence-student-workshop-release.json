@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-17T03:43:01.437Z",
+  "sourceRevision": "88f5bea229aa07f818de88eacfa9edea830ae678",
+  "imageDigest": "sha256:cd3a12e61302f8fd4b84ebdafbd4a525b743d76101ebb69b13d19b37778421d1",
+  "ciStatus": "success",
+  "ciUrl": "https://github.com/ga22038/MultiCloud/actions/runs/38999188765",
+  "results": [
+    {
+      "site": "gcp",
+      "pageStatus": 200,
+      "studentWorkshop": true,
+      "guideStatus": 200,
+      "guideCorrect": true,
+      "readyStatus": 200,
+      "servingSite": "gcp",
+      "unauthenticatedStatus": 401
+    },
+    {
+      "site": "aws",
+      "pageStatus": 200,
+      "studentWorkshop": true,
+      "guideStatus": 200,
+      "guideCorrect": true,
+      "readyStatus": 200,
+      "servingSite": "aws",
+      "unauthenticatedStatus": 401
+    },
+    {
+      "site": "app",
+      "pageStatus": 200,
+      "studentWorkshop": true,
+      "guideStatus": 200,
+      "guideCorrect": true,
+      "readyStatus": 200,
+      "servingSite": "aws",
+      "unauthenticatedStatus": 401
+    }
+  ],
+  "awsDeployment": "verified public",
+  "gcpDeployment": "verified public"
+}

@@ -9,7 +9,8 @@ $taskAws = Join-Path $env:LOCALAPPDATA 'Programs\Amazon\AWSCLIV2\aws.exe'
 # SSM records command parameters. Only public scripts may pass through this helper.
 $taskScript = [IO.Path]::GetFullPath($ScriptPath)
 if ($taskScript -match '[\\/]\.secrets[\\/]') { throw 'No enviar secretos en parámetros SSM. Transferirlos por S3 privado.' }
-$taskEncoded = [Convert]::ToBase64String([IO.File]::ReadAllBytes($taskScript))
+$taskText = [IO.File]::ReadAllText($taskScript).TrimStart([char]0xFEFF).Replace("`r`n", "`n").Replace("`r", "`n")
+$taskEncoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($taskText))
 $taskRemotePath = '/tmp/polaris-ues-public-' + [Guid]::NewGuid().ToString('N') + '.sh'
 $taskCommandText = 'umask 077; printf %s {0} | base64 -d > {1}; bash {1} </dev/null; task_exit=$?; rm -f {1}; exit $task_exit' -f $taskEncoded, $taskRemotePath
 $taskParams = @{commands = @($taskCommandText) } | ConvertTo-Json -Compress
