@@ -1,5 +1,6 @@
 # Credenciales y archivos de entorno locales
 /.secrets/
+/lab.json
 .env
 .env.*
 !.env.example

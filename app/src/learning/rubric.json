@@ -1,0 +1,173 @@
+[
+  {
+    "id": "local-containers",
+    "title": "Docker local",
+    "section": "Preparación",
+    "scope": "local",
+    "test": "local test",
+    "expected": "MariaDB, dos aplicaciones y NGINX saludables; migración termina correctamente.",
+    "question": "¿Qué diferencia hay entre imagen, contenedor y volumen?"
+  },
+  {
+    "id": "local-api",
+    "title": "API local y autenticación",
+    "section": "Preparación",
+    "scope": "local",
+    "test": "local test",
+    "expected": "Ready 200 y API sin sesión 401.",
+    "question": "¿Por qué 401 es el resultado correcto sin sesión?"
+  },
+  {
+    "id": "local-failover",
+    "title": "Caída y recuperación local",
+    "section": "Preparación",
+    "scope": "local",
+    "test": "local failover",
+    "expected": "aws-lab, gcp-lab tras parar el primario y aws-lab tras recuperarlo.",
+    "question": "¿Por qué esta prueba no demuestra una caída cloud?"
+  },
+  {
+    "id": "identity",
+    "title": "Identidades propias",
+    "section": "Preparación",
+    "scope": "cloud",
+    "test": "cloud identity",
+    "expected": "El ID AWS y proyecto GCP coinciden con lab.json; credenciales individuales.",
+    "question": "¿Iniciar sesión en el ERP concede permisos en AWS?"
+  },
+  {
+    "id": "cloud-http",
+    "title": "API en ambas nubes",
+    "section": "1, 3 y fase 3",
+    "scope": "cloud",
+    "test": "cloud test",
+    "expected": "Endpoints propios AWS/GCP devuelven ready y el sitio correcto.",
+    "question": "¿Cómo relacionas cada respuesta con una VM real?"
+  },
+  {
+    "id": "cloud-tls",
+    "title": "HTTPS y API protegida",
+    "section": "1, 4A y fase 3",
+    "scope": "cloud",
+    "test": "cloud test",
+    "expected": "Certificados válidos en AWS, GCP y app; API de negocio 401 sin sesión.",
+    "question": "¿Qué aporta TLS y qué aporta la autenticación?"
+  },
+  {
+    "id": "rds-private",
+    "title": "MariaDB RDS privado",
+    "section": "2, 3 y fase 1",
+    "scope": "cloud",
+    "test": "cloud test",
+    "expected": "RDS MariaDB disponible, sin acceso público; reglas 3306 restringidas a red/SG propios.",
+    "question": "¿Por qué revisar reglas además de PubliclyAccessible?"
+  },
+  {
+    "id": "rds-multiaz",
+    "title": "RDS Multi-AZ",
+    "section": "3",
+    "scope": "cloud",
+    "test": "cloud test",
+    "expected": "MultiAZ=true. Si el plan no lo permite, registrar pendiente y excepción del profesor.",
+    "question": "¿Una réplica GCP equivale a RDS Multi-AZ?"
+  },
+  {
+    "id": "vpn",
+    "title": "VPN IPsec y BGP",
+    "section": "1, 2 y fase 1",
+    "scope": "cloud",
+    "test": "cloud test",
+    "expected": "Cuatro túneles y sesiones BGP UP; consulta SQL privada exitosa.",
+    "question": "¿Qué función cumple BGP dentro de la VPN?"
+  },
+  {
+    "id": "replica",
+    "title": "Réplica GTID y TLS",
+    "section": "4B y fase 2",
+    "scope": "cloud",
+    "test": "cloud replica",
+    "expected": "IO/SQL Yes, GTID, TLS verificado, read-only y firma coincidente con RDS durante una ventana sin escrituras.",
+    "question": "¿Por qué comparar las dos API no prueba la réplica?"
+  },
+  {
+    "id": "same-image",
+    "title": "Misma versión Docker",
+    "section": "3 y fase 3",
+    "scope": "cloud",
+    "test": "cloud runtime",
+    "expected": "Mismo ID de imagen local transferida y servicios saludables en AWS/GCP.",
+    "question": "¿Por qué comparar el contenido de la imagen y no solo su etiqueta?"
+  },
+  {
+    "id": "nginx-remote",
+    "title": "Backup remoto NGINX",
+    "section": "4A y fase 3",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "NGINX usa backend GCP backup cuando falla app AWS, manteniendo fijo el destino DNS AWS.",
+    "question": "¿Cómo distingues conmutación NGINX de conmutación DNS?"
+  },
+  {
+    "id": "dns-failover",
+    "title": "DNS y caída de aplicación",
+    "section": "5 y fase 4",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "AWS falla, GCP continúa y app conmuta; medir operación completa y recuperación.",
+    "question": "¿El tiempo HTTP de una consulta es el RTO?"
+  },
+  {
+    "id": "load-lag",
+    "title": "Carga y retraso inferior a 1 s",
+    "section": "Fases 2 y 4",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "Carga definida, errores/latencias y muestras de réplica durante toda la prueba. Lag 0 puntual no basta.",
+    "question": "¿Qué carga y duración respaldan tu conclusión?"
+  },
+  {
+    "id": "vpn-failure",
+    "title": "Redundancia de túneles",
+    "section": "Fase 1: alta disponibilidad",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "Corte individual, continuidad SQL por rutas restantes y recuperación documentada.",
+    "question": "¿Túneles UP demuestran que toleran un corte?"
+  },
+  {
+    "id": "promotion",
+    "title": "Pérdida AWS/RDS y promoción",
+    "section": "5 y fase 4",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "Aislar escritor anterior, promover GCP, cambiar destino, verificar escrituras y medir RTO/RPO; registrar automatización.",
+    "question": "¿Cómo evitas dos escritores y transacciones perdidas?"
+  },
+  {
+    "id": "failback",
+    "title": "Retorno de datos hacia AWS",
+    "section": "5",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "Resincronizar desde GCP promovido, conservar escrituras, conciliar operaciones y volver con un solo escritor.",
+    "question": "¿Volver el DNS a AWS demuestra failback de datos?"
+  },
+  {
+    "id": "restore",
+    "title": "Restauración de respaldo",
+    "section": "4B y recuperación",
+    "scope": "cloud",
+    "test": "Ensayo supervisado",
+    "expected": "Restaurar en base aislada y comparar contenido/GTID sin sobrescribir bases activas.",
+    "question": "¿Un archivo de respaldo demuestra que puedes restaurarlo?"
+  },
+  {
+    "id": "report",
+    "title": "Informe de pruebas",
+    "section": "Fase 4: Failover Test Report",
+    "scope": "both",
+    "test": "report",
+    "expected": "Autor, commit, cuentas, fecha, comandos, resultados, fallos, capturas y límites. Sin secretos ni pruebas históricas ajenas.",
+    "question": "¿Qué demuestra cada evidencia y qué falta probar?"
+  }
+]

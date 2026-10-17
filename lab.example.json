@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "name": "alumno01",
+  "localPort": 8082,
+  "databasePort": 3309,
+  "awsProfile": "",
+  "awsAccountId": "",
+  "gcpAccount": "",
+  "gcpProjectId": "",
+  "domainMode": "none",
+  "domain": "",
+  "budgetReviewedOn": "",
+  "gcpTrialExpiresOn": ""
+}

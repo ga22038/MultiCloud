@@ -1,0 +1,202 @@
+.section {
+  padding: 72px max(5vw, 24px);
+  border-top: 1px solid #dce4eb;
+  background: #f1f6f8;
+  scroll-margin-top: 20px;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 32px;
+  margin-bottom: 28px;
+}
+.heading > p {
+  max-width: 440px;
+}
+.heading span {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+.heading h2 {
+  max-width: 650px;
+  margin: 12px 0;
+}
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.steps button,
+.next button,
+.commands button {
+  border: 1px solid #c2d0da;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  color: #243e54;
+  cursor: pointer;
+  font: inherit;
+}
+.steps button[aria-current="step"] {
+  background: #243e54;
+  color: #fff;
+}
+.panel {
+  padding: clamp(20px, 4vw, 42px);
+  background: #fff;
+  border: 1px solid #dce4eb;
+  border-radius: 16px;
+}
+.panel h3 {
+  margin-top: 0;
+  font-size: 25px;
+}
+.panel p {
+  max-width: 960px;
+}
+.fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 24px 0;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  color: #243e54;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.field input,
+.field select,
+.field textarea {
+  background: #fbfcfd;
+  border: 1px solid #b8c9d6;
+  border-radius: 7px;
+  padding: 12px;
+  color: #243e54;
+  font: inherit;
+  font-size: 16px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.field input:focus-visible,
+.field select:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid #7a9ab5;
+  outline-offset: 2px;
+}
+.commands {
+  border: 1px solid #dce4eb;
+  border-radius: 10px;
+  padding: 14px;
+  margin: 20px 0;
+  background: #f7f9fb;
+}
+.commands button,
+.primary,
+.next button,
+.next span,
+.upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.commands pre {
+  overflow-x: auto;
+  padding: 5px 0;
+  white-space: pre;
+  font-size: 13px;
+  line-height: 1.8;
+  color: #243e54;
+}
+.commands span {
+  font-size: 12px;
+}
+.primary {
+  color: #fff;
+  background: #243e54;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font: inherit;
+  cursor: pointer;
+}
+.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.note {
+  border-left: 3px solid #7a9ab5;
+  padding: 16px 20px;
+  background: #f1f6f8;
+  margin: 18px 0;
+}
+.next {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  border-top: 1px solid #dce4eb;
+  padding-top: 20px;
+  margin-top: 24px;
+  font-size: 13px;
+}
+.status {
+  min-height: 24px;
+  color: #245b44 !important;
+}
+.upload {
+  flex-wrap: wrap;
+  border: 1px dashed #7a9ab5;
+  padding: 16px;
+  border-radius: 8px;
+}
+.upload input {
+  max-width: 100%;
+}
+.rubric {
+  margin: 24px 0;
+}
+.rubric details {
+  border-bottom: 1px solid #dce4eb;
+  padding: 16px 0;
+}
+.rubric summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 600;
+}
+.badge {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 3px 9px;
+  border-radius: 14px;
+  background: #edf2f5;
+  white-space: nowrap;
+}
+@media (max-width: 700px) {
+  .heading {
+    display: block;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+  }
+  .section {
+    padding: 40px 20px;
+  }
+  .steps button {
+    flex: 1 1 140px;
+  }
+  .panel {
+    padding: 20px;
+  }
+}

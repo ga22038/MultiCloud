@@ -1,5 +1,7 @@
 # Polaris UES
 
+**Para compañeros con cuentas propias:** sigue [Tu laboratorio: Docker, AWS y Google Cloud](docs/laboratorio-personal.md). La sección **Mi laboratorio** de `/aprender` genera la configuración por carnet. La nueva ruta `npm run lab -- ...` crea secretos y estados aislados, comprueba identidades y guarda evidencias por requisito. Las cuentas y créditos pertenecen a cada alumno; el propietario puede delegar [subdominios por carnet](docs/subdominios-alumnos.md) cuando reciba sus NS reales. El flujo cloud aún necesita ensayo completo en cuentas nuevas.
+
 El equipo comparte inventario y pedidos, con autor y última modificación en las tablas y un módulo de Auditoría. El acceso incluye una bienvenida personalizada de 6 segundos. Ver [usuarios y trazabilidad](docs/usuarios-y-trazabilidad.md).
 
 Responsable del proyecto: **ga22038**. Repositorio: [MultiCloud](https://github.com/ga22038/MultiCloud).

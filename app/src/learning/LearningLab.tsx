@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { lessons, manualUrl, repository, requirements } from "./content";
 import styles from "./LearningLab.module.css";
+import StudentLab from "./StudentLab";
 
 type Probe = {
   observedAt: string;
@@ -72,8 +73,8 @@ function Code({
 
 export default function LearningLab() {
   const [scenario, setScenario] = useState<Scenario>("normal");
-  const [track, setTrack] = useState<"probar" | "replicar">("probar");
-  const [lessonId, setLessonId] = useState("http");
+  const [track, setTrack] = useState<"probar" | "replicar">("replicar");
+  const [lessonId, setLessonId] = useState("local");
   const [completed, setCompleted] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [probe, setProbe] = useState<Probe | null>(null);
@@ -204,6 +205,7 @@ export default function LearningLab() {
           <small>LAB</small>
         </a>
         <nav aria-label="Secciones del laboratorio">
+          <a href="#mi-laboratorio">Mi laboratorio</a>
           <a href="#arquitectura">Arquitectura</a>
           <a href="#taller">Taller</a>
           <a href="#pruebas">Pruebas</a>
@@ -230,8 +232,8 @@ export default function LearningLab() {
               laboratorio.
             </p>
             <div className={styles.actions}>
-              <a href="#taller" className={styles.primary}>
-                Empezar el recorrido <ArrowRight size={16} />
+              <a href="#mi-laboratorio" className={styles.primary}>
+                Crear mi laboratorio <ArrowRight size={16} />
               </a>
               <a href={repository} target="_blank" rel="noreferrer">
                 Ver el código <GitBranch size={16} />
@@ -279,6 +281,7 @@ export default function LearningLab() {
             </p>
           </div>
         </section>
+        <StudentLab />
         <section id="arquitectura" className={styles.section}>
           <div className={styles.sectionHeading}>
             <div>
@@ -286,8 +289,9 @@ export default function LearningLab() {
               <h2>Sigue el recorrido de una petición.</h2>
             </div>
             <p>
-              Cambia el escenario y observa qué capa continúa funcionando. Esto
-              es una simulación educativa; no controla servidores.
+              Arquitectura del proyecto de referencia. Cambia el escenario y
+              observa qué capa continúa funcionando. Esto es una simulación
+              educativa; no controla servidores.
             </p>
           </div>
           <div className={styles.scenarios} aria-label="Escenario simulado">
@@ -405,15 +409,17 @@ export default function LearningLab() {
               <h2>Un comando. Una evidencia.</h2>
             </div>
             <p>
-              Lee el propósito, ejecuta en el entorno correcto y contrasta el
-              resultado. Tu progreso es personal; no certifica requisitos.
+              Para construir tu copia usa Mi laboratorio, arriba. Esta
+              referencia explica el proyecto del equipo. Lee el propósito y
+              contrasta el resultado. Tu progreso es personal; no certifica
+              requisitos.
             </p>
           </div>
           <div className={styles.trackRow}>
             <div className={styles.scenarios}>
               {(
                 [
-                  ["probar", "Demostrar nuestro proyecto"],
+                  ["probar", "Referencia del equipo"],
                   ["replicar", "Construir mi laboratorio"],
                 ] as const
               ).map(([id, label]) => (
@@ -459,7 +465,7 @@ export default function LearningLab() {
             <article className={styles.lesson} aria-labelledby="lesson-title">
               <span className={styles.eyebrow}>
                 {active.track === "probar"
-                  ? "LABORATORIO ACTUAL"
+                  ? "REFERENCIA DEL EQUIPO"
                   : "TU CUENTA / TU ENTORNO"}
               </span>
               <h3 id="lesson-title">{active.title}</h3>
@@ -572,11 +578,13 @@ export default function LearningLab() {
           <div className={styles.sectionHeading}>
             <div>
               <span className={styles.eyebrow}>03 / OBSERVAR</span>
-              <h2>Consulta el proyecto que está en línea.</h2>
+              <h2>Consulta el proyecto de referencia del equipo.</h2>
             </div>
             <p>
-              Solo lecturas HTTP de los tres endpoints públicos del equipo. No
-              apaga servicios, no escribe datos y no utiliza credenciales cloud.
+              Estos resultados pertenecen al equipo, no a tu laboratorio
+              personal. Solo lecturas HTTP de los tres endpoints públicos del
+              equipo. No apaga servicios, no escribe datos y no utiliza
+              credenciales cloud.
             </p>
           </div>
           <div className={styles.probeBar}>

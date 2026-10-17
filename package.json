@@ -10,6 +10,8 @@
     "node": ">=22.12"
   },
   "scripts": {
+    "lab": "node scripts/lab.mjs",
+    "test:lab": "node --test scripts/lab/tests/*.test.mjs",
     "local:init": "node scripts/setup-local.mjs",
     "dev": "node scripts/run-next.mjs dev",
     "build": "npm run build --workspace=app",

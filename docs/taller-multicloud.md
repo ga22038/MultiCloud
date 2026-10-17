@@ -1,5 +1,7 @@
 # Polaris UES: construir, comprobar y defender el laboratorio
 
+**Ruta individual nueva:** [laboratorio con cuentas propias](laboratorio-personal.md). Usa `npm run lab -- ...`, configuración por alumno y estados separados. Los helpers de las secciones siguientes corresponden al laboratorio de referencia del propietario; no se utilizan para desplegar en cuentas de compañeros.
+
 Guía del equipo, 11 de octubre de 2026. Responsable del proyecto: ga22038.
 
 El objetivo es aprender infraestructura multicloud y demostrarla con observaciones propias. El ERP es la aplicación transaccional usada para probar esa infraestructura. Las cuentas de los compañeros dentro del ERP no conceden acceso a AWS, Google Cloud, Terraform ni a los servidores.

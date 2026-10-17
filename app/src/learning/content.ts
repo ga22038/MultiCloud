@@ -149,12 +149,12 @@ export const lessons: Lesson[] = [
     goal: "Entender imagen, contenedor y upstream antes de gastar crédito cloud.",
     steps: [
       "Instala Git, Node.js 24 LTS y Docker Desktop con motor Linux. Clona el repositorio en tu carpeta propia.",
-      "local:init genera secretos nuevos en .secrets/runtime.env. El administrador local es admin; no hereda cuentas del equipo.",
-      "local:up construye imagen y arranca MariaDB, dos aplicaciones y NGINX. Abre localhost:8080.",
-      "Detén app-primary en tu laboratorio y observa gcp-lab. Recupéralo con start app-primary.",
+      "En Mi laboratorio configura tu carnet y descarga lab.json. lab init genera secretos nuevos y un proyecto Docker propio.",
+      "lab local up construye y arranca MariaDB, dos aplicaciones y NGINX en el puerto que elegiste.",
+      "lab local failover detiene tu primario, comprueba gcp-lab y recupera aws-lab. Guarda tu informe.",
     ],
     command:
-      "git clone https://github.com/ga22038/MultiCloud.git\ncd MultiCloud\nnpm ci\nnpm run local:init\nnpm run local:up\n# Practicar solo en tu laboratorio local:\ndocker compose --env-file .secrets/runtime.env stop app-primary\ndocker compose --env-file .secrets/runtime.env start app-primary",
+      "# Desde tu clon, con lab.json propio:\nnpm run lab -- init\nnpm run lab -- local up\nnpm run lab -- local test\nnpm run lab -- local failover\nnpm run lab -- report",
     expected:
       "NGINX local sirve el backup cuando el primario se detiene. Las dos aplicaciones comparten MariaDB local.",
     limit:
@@ -176,7 +176,7 @@ export const lessons: Lesson[] = [
     expected:
       "La identidad y proyecto deben pertenecer a tu laboratorio. No deben mostrar las cuentas del propietario por accidente.",
     limit:
-      "No hay un despliegue universal de un clic. El repositorio tiene referencias concretas que debes adaptar antes de apply.",
+      "Usa la nueva ruta npm run lab: comprueba tu identidad. Los helpers antiguos pertenecen al laboratorio de referencia.",
   },
   {
     id: "terraform",
@@ -184,17 +184,17 @@ export const lessons: Lesson[] = [
     title: "Adaptar Terraform antes de aplicar",
     goal: "Aprender qué crea plan/apply y dónde guarda el estado.",
     steps: [
-      "En aws-only y vpn-only sustituye cuenta permitida, buckets y keys de estado. En gcp-only establece tu project_id.",
-      "Adapta el proyecto GCP del VPN, dominio, IP del nuevo servidor, bucket de transferencia y helpers con correo/IDs fijos.",
+      "Completa tus cuentas y dominio en Mi laboratorio, descarga lab.json y verifica cloud identity.",
+      "cloud prepare genera roots privados con tus cuentas y nombres. Las IP se leen de tus estados, no de valores del propietario.",
       "Provisiona GCP, luego AWS y finalmente VPN. Cada root tiene estado propio; VPN lee el estado AWS de tu cuenta.",
       "Revisa el plan en detalle antes de apply. No apliques el root superior sobre los estados activos.",
     ],
     command:
-      "# Validar estructura en tu clon; no aprovisiona:\nterraform -chdir=infra/terraform/gcp-only init -backend=false\nterraform -chdir=infra/terraform/gcp-only validate\n\n# init prepara; plan muestra; apply crea/modifica recursos.\n# El apply de cuentas nuevas requiere adaptación previa.",
+      "npm run lab -- cloud prepare\nnpm run lab -- terraform gcp-only init\nnpm run lab -- terraform gcp-only validate\n# Lee el plan antes de apply; usa tus créditos y estados.",
     expected:
       "validate comprueba sintaxis. El futuro plan debe referirse a tus cuentas y estados propios.",
     limit:
-      "validate no demuestra infraestructura existente. Los wrappers terraform-aws/terraform-gcp actuales contienen valores del propietario.",
+      "validate no demuestra infraestructura existente. Usa solo npm run lab para esta ruta; el estado inicial es local privado.",
   },
   {
     id: "deploy",
@@ -202,13 +202,13 @@ export const lessons: Lesson[] = [
     title: "Unir imagen, escritor y réplica",
     goal: "Construir el mismo recorrido de datos en tu infraestructura.",
     steps: [
-      "Ejecuta pruebas y construye Dockerfile. Publica tu imagen en Artifact Registry y ECR; compara digest.",
+      "Ejecuta pruebas y construye tus imágenes. La ruta inicial las transfiere a tus VM con docker save/load; publicar en registros es una práctica adicional.",
       "Inicializa una base nueva con permisos mínimos. Configura ambas aplicaciones para usar el mismo escritor RDS por TLS.",
       "Haz un respaldo consistente del RDS propio y registra GTID. Restaura únicamente en la réplica GCP nueva.",
       "Configura usuario de replicación, VPN, certificado CA y read-only. Inicia GTID y verifica IO/SQL antes de activar DNS.",
     ],
     command:
-      "npm run typecheck\nnpm run lint\nnpm test\nnpm run build\n# Lee Dockerfile, cloudbuild.yaml y scripts/setup-gcp-replica.mjs.\n# Adapta registros, endpoint, credenciales y GTID a tu cuenta.",
+      "npm run lab -- cloud deploy build\nnpm run lab -- cloud access\nnpm run lab -- cloud deploy database\nnpm run lab -- cloud replica\nnpm run lab -- cloud deploy aws\nnpm run lab -- cloud deploy gcp",
     expected:
       "Mismo digest de aplicación; RDS como único escritor; réplica GCP read-only conectada por VPN/TLS.",
     limit:
@@ -226,7 +226,7 @@ export const lessons: Lesson[] = [
       "Una URL run.app o vercel.app puede servir una aplicación en ese proveedor; no reemplaza automáticamente Route 53, EC2, VPN ni RDS.",
     ],
     command:
-      "# Práctica local sin dominio:\nInvoke-RestMethod http://127.0.0.1:8080/api/health/ready\n\n# VM propia: sustituir IP antes de usar (solo práctica HTTP).\n# Invoke-RestMethod http://TU_IP/api/health/ready",
+      "# Tu Docker local, con el puerto de lab.json:\nnpm run lab -- local test\n# Después de desplegar en tus cuentas:\nnpm run lab -- cloud test",
     expected:
       "Pueden practicar sin comprar un dominio. Para la defensa completa deben resolver TLS y conmutación de nombres DNS.",
     limit:
